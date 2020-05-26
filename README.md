@@ -1,3 +1,3 @@
-##algorithms
+#algorithms
 
 Learn hard, code hard :)

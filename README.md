@@ -1,3 +1,1 @@
-#algorithms
-
-Learn hard, code hard :)
+**algorithms** Learn hard, code hard :)

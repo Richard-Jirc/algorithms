@@ -29,17 +29,6 @@ class stairProblem {
 	}
 }
 
-// function calculate(a, n, steps) {
-// 	if (n == 0) {
-// 		console.log(a)
-// 	}
-// 	if (n < steps[0]) return
-//
-// 	for (let i = 0; i < steps.length; i++) {
-// 		if (n >= steps[i]) calculate(a + `${steps[i]} `, n - steps[i], steps)
-// 	}
-// }
-
 var k = new stairProblem(21, [7, 14])
 
 console.log(k.pool)

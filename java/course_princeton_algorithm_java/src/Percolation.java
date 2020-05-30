@@ -2,83 +2,77 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    WeightedQuickUnionUF site;
-    boolean[] open;
-    int open_num;
-
-    static int size;
+    private final WeightedQuickUnionUF site;
+    private final boolean[] open;
+    private int openNum;
+    private final int size;
 
     public Percolation(int n) {
         if (n <= 0) throw new IllegalArgumentException();
         int length = n * n + 2;
         size = n;
-        this.site = new WeightedQuickUnionUF(length);
-        this.open = new boolean[length];
-        this.open[0] = true;
-        this.open[length - 1] = true;
-        for (int i=1; i<n+1; i++) {
-            this.site.union(0, i);
-            this.site.union(i + n*(n-1), n*n - 1);
-        }
+        site = new WeightedQuickUnionUF(length);
+        open = new boolean[length];
+        open[0] = true;
+        open[length - 1] = true;
+//        for (int i=1; i<n+1; i++) {
+//            site.union(0, i);
+//            site.union(i + n*(n-1), n*n + 1);
+//        }
     }
 
-    public void open(int x, int y) {
-        if (x < 1 && y < 1 && x > size && y > size) throw new IllegalArgumentException();
-        if (this.isOpen(x, y)) return;
+    public void open(int row, int col) {
+        if (row < 1 || col < 1 || row > size || col > size) throw new IllegalArgumentException();
+        if (this.isOpen(row, col)) return;
 
-        this.open[position(x, y)] = true;
-        open_num++;
+        open[this.position(row, col)] = true;
+        openNum++;
 
-        int[] neighbor = openNeighbor(x, y);
+        int[] neighbor = this.openNeighbor(row, col);
         for (int i: neighbor) {
             if (i == -1) continue;
-            if (!this.open[i]) this.site.union(i, position(x, y));
+            if (open[i]) site.union(i, this.position(row, col));
         }
     }
 
-    public boolean isOpen(int x, int y) {
-        return this.open[position(x, y)];
+    public boolean isOpen(int row, int col) {
+        if (row < 1 || col < 1 || row > size || col > size) throw new IllegalArgumentException();
+        return open[position(row, col)];
     }
 
-    public boolean isFull(int x, int y) {
-        return this.site.find(position(x, y)) == 0;
+    public boolean isFull(int row, int col) {
+        if (col < 1 || row < 1 || col > size || row > size) throw new IllegalArgumentException();
+        if (!this.isOpen(row, col)) return false;
+        return site.find(this.position(row, col)) == site.find(0);
     }
 
     public int numberOfOpenSites() {
-        return this.open_num;
+        return openNum;
     }
 
     public boolean percolates() {
-        return this.site.find(size * size) == 0;
+        return site.find(size * size + 1) == site.find(0);
     }
 
-    private static int position(int x, int y) {
-        if (x < 1 && y < 1 && x > size && y > size) return -1;
-        return (y - 1) * size + x;
+    private int position(int row, int col) {
+        if (col < 1 || col > size) return -1;
+        if (row == 0) return 0;
+        else if (row == size + 1) return size * size + 1;
+        return (row - 1) * size + col;
     }
 
-    private static int[] openNeighbor(int x, int y) {
+    private int[] openNeighbor(int row, int col) {
         int[] list = new int[4];
-        if (position(x-1, y) == -1) {
-            list[0] = -1;
-        } else {
-            list[0] = position(x-1, y);
+        int[] value = {this.position(row, col - 1), this.position(row - 1, col), this.position(row, col + 1), this.position(row + 1, col)};
+        for (int k = 0; k < 4; k++) {
+            if (value[k] == -1) {
+                list[k] = -1;
+            } else {
+                list[k] = value[k];
+            }
         }
-        if (position(x, y-1) == -1) {
-            list[1] = -1;
-        } else {
-            position(x, y-1);
-        }
-        if (position(x+1, y) == -1) {
-            list[2] = -1;
-        } else {
-            list[2] = position(x+1, y);
-        }
-        if (position(x, y+1) == -1) {
-            list[3] = -1;
-        } else {
-            list[3] = position(x, y+1);
-        }
+//        for(int i: list) System.out.print(i + ",");
+//        System.out.println();
         return list;
     }
 
@@ -89,18 +83,17 @@ public class Percolation {
 //            else if (i % size == 0) System.out.println();
 //            if (i == list.length - 1) System.out.println();
 //        }
-//        System.out.println();
 //    }
 
+
     public static void main(String[] args) {
-        int n = 5;
+        int n = 6;
         Percolation test = new Percolation(n);
-        test.open(1,5);
-        test.open(1,4);
-        test.open(1,3);
-        test.open(1,2);
-        test.open(1,1);
-//        print(test.open, n);
-//        System.out.println(test.percolates());
+        test.open(1, 6);
+//        test.open(6, 2);
+//        test.open(6, 1);
+//        System.out.println(test.site.find(0));
+        System.out.println("Full? " + test.isFull(1,6));
+        System.out.println("Perc? " + test.percolates());
     }
 }

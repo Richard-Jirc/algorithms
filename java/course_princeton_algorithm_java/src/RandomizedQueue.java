@@ -55,6 +55,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Iterator<Item> iterator() { return new RandomQueueIterator(); }
     private class RandomQueueIterator implements Iterator<Item> { // in a random order.
         int index = pointer;
+        int[] picker = new int[pointer];
         @Override
         public boolean hasNext() {
             return index > 0;

@@ -23,7 +23,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (item == null) throw new IllegalArgumentException();
         if (pointer == list.length) list = resize(list.length * 2);
         list[pointer++] = item;
-        StdOut.println("?:" + pointer);
     }
     public Item dequeue() { // should be returning a random item.
         if (this.isEmpty()) throw new NoSuchElementException();

@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class QuickUnion {
 
@@ -31,16 +32,6 @@ public class QuickUnion {
     }
 
     public static void main(String[] args) {
-        QuickUnion test = new QuickUnion(10);
-        test.union(3,4);
-        test.union(8,3);
-        test.union(5,6);
-        test.union(4,9);
-        test.union(1,2);
-        test.union(0,5);
-        test.union(2,7);
-        test.union(1,6);
-        test.union(3,7);
-        System.out.print(test.check(5,4));
+
     }
 }

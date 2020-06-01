@@ -1,5 +1,3 @@
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -8,7 +6,7 @@ import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
 
-    Node first, last;
+    private Node first, last;
     private int size = 0;
 
     public Deque() {
@@ -81,42 +79,41 @@ public class Deque<Item> implements Iterable<Item> {
         }
         @Override
         public Item next() {
+            if (current == null) throw new NoSuchElementException();
             Item item = current.value;
             current = current.next;
             return item;
         }
         @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
+        public void remove() { throw new UnsupportedOperationException(); }
     }
     public static void main(String[] args) {
-        Deque<Integer> test = new Deque<Integer>();
-        test.addFirst(1);
-        test.addLast(2);
-        test.addLast(3);
-        test.addFirst(0);
-        test.removeFirst();
+//        Deque<Integer> test = new Deque<Integer>();
+//        test.addFirst(1);
+//        test.addLast(2);
+//        test.addLast(3);
+//        test.addFirst(0);
+//        test.removeFirst();
 
-        if (test.first != null) {
-            StdOut.println(test.first);
-            StdOut.println("First.value:" + test.first.value);
-            StdOut.println("First.prev:" + test.first.prev);
-            StdOut.println("First.next:" + test.first.next);
-        } else {
-            StdOut.println("First is null");
-        }
-        if (test.last != null) {
-            StdOut.println(test.last);
-            StdOut.println("Last.value:" + test.last.value);
-            StdOut.println("Last.prev:" + test.last.prev);
-            StdOut.println("Last.next:" + test.last.next);
-        } else {
-            StdOut.println("last is null");
-        }
-        for (Integer i: test) {
-            StdOut.print(i + ",");
-        }
-        StdOut.println("size:" + test.size());
+//        if (test.first != null) {
+//            StdOut.println(test.first);
+//            StdOut.println("First.value:" + test.first.value);
+//            StdOut.println("First.prev:" + test.first.prev);
+//            StdOut.println("First.next:" + test.first.next);
+//        } else {
+//            StdOut.println("First is null");
+//        }
+//        if (test.last != null) {
+//            StdOut.println(test.last);
+//            StdOut.println("Last.value:" + test.last.value);
+//            StdOut.println("Last.prev:" + test.last.prev);
+//            StdOut.println("Last.next:" + test.last.next);
+//        } else {
+//            StdOut.println("last is null");
+//        }
+//        for (Integer i: test) {
+//            StdOut.print(i + ",");
+//        }
+//        StdOut.println("size:" + test.size());
     }
 }

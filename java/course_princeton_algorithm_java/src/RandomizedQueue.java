@@ -23,6 +23,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (item == null) throw new IllegalArgumentException();
         if (pointer == list.length) list = resize(list.length * 2);
         list[pointer++] = item;
+        StdOut.println("?:" + pointer);
     }
     public Item dequeue() { // should be returning a random item.
         if (this.isEmpty()) throw new NoSuchElementException();
@@ -40,7 +41,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private Item[] resize(int length) {
         Item[] newList = (Item[]) new Object[length];
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < Math.min(length, list.length); i++) {
             newList[i] = list[i];
         }
         return newList;
@@ -76,9 +77,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         test.enqueue(4);
         test.enqueue(5);
         test.enqueue(6);
-        test.enqueue(7);
-        StdOut.println(test.sample());
-        StdOut.println(test.dequeue());
+//        test.enqueue(7);
         for (Integer i : test) {
             StdOut.print(i + ",");
         }

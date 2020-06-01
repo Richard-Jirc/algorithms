@@ -2,7 +2,7 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-// Deque by double linked-list
+// Deque by doubly linked-list
 
 public class Deque<Item> implements Iterable<Item> {
 
@@ -17,6 +17,9 @@ public class Deque<Item> implements Iterable<Item> {
         Node prev;
         Item value;
         Node next;
+        public Node(Item item) {
+            this.value = item;
+        }
     }
     public boolean isEmpty() {
         return size == 0;
@@ -29,8 +32,7 @@ public class Deque<Item> implements Iterable<Item> {
         if (value == null) throw new IllegalArgumentException();
         size++;
         Node oldFirst = first;
-        first = new Node();
-        first.value = value;
+        first = new Node(value);
         first.next = oldFirst;
         if (oldFirst == null) last = first;
         else oldFirst.prev = first;
@@ -39,8 +41,7 @@ public class Deque<Item> implements Iterable<Item> {
         if (value == null) throw new IllegalArgumentException();
         size++;
         Node oldLast = last;
-        last = new Node();
-        last.value = value;
+        last = new Node(value);
         last.prev = oldLast;
         if (oldLast == null) first = last;
         else oldLast.next = last;

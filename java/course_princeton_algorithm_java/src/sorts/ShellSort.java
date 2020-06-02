@@ -1,5 +1,7 @@
 package sorts;
 
+// this algorithm utilizes insertion sort
+
 public class ShellSort {
 
 

@@ -7,14 +7,13 @@ public class InsertionSort<T> {
     int swapping;
     int comparison;
 
-    public void sort(T[] list, Comparator<T> comparator) {
+    public void sort(T[] list, int step, Comparator<T> comparator) {
         swapping = 0;
         comparison = 0;
-        for (int i = 0; i < list.length; i++) {
-            if (i == 0) continue;
-            for (int j = i; j >= 1; j--) {
+        for (int i = 1; i < list.length; i++) {
+            for (int j = i; j >= step; j--) { // throw smallest item to the head
                 comparison++;
-                if (comparator.compare(list[j], list[j - 1]) < 0) swap(list, j, j - 1);
+                if (comparator.compare(list[j], list[j - step]) < 0) swap(list, j, j - step);
                 else break;
             }
         }
@@ -28,9 +27,9 @@ public class InsertionSort<T> {
     }
 
     public static void main(String[] args) {
-        Integer[] array = {1, 2, 3, 4, 5, 6};
+        Integer[] array = {5, 4, 3, 2, 1, 0};
         InsertionSort<Integer> sort = new InsertionSort<>();
-        sort.sort(array, new Comparator<Integer>() {
+        sort.sort(array, 3, new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
                 return o1 - o2;

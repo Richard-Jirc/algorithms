@@ -33,7 +33,7 @@ public class SelectionSort<T> {
                 return o1 - o2;
             }
         });
-        System.out.println(Sort.numberOfCompare); // ~ o(n^2): still too slow
+        System.out.println(Sort.numberOfCompare); // ~ always o(n^2): still too slow
         for (int i : test) {
             System.out.print(i + ",");
         }

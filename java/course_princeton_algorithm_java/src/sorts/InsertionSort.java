@@ -12,7 +12,7 @@ public class InsertionSort<T> {
         comparison = 0;
         for (int i = 0; i < list.length; i++) {
             if (i == 0) continue;
-            for (int j = i; j > 0; j--) {
+            for (int j = i; j >= 1; j--) {
                 comparison++;
                 if (comparator.compare(list[j], list[j - 1]) < 0) swap(list, j, j - 1);
                 else break;

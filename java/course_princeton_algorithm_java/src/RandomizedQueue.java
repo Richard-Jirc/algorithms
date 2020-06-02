@@ -28,7 +28,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (this.isEmpty()) throw new NoSuchElementException();
         if (list.length > 4 && pointer <= list.length / 4) list = resize(list.length / 2);
         int index = StdRandom.uniform(pointer);
-        Item randomItem = swap(index, pointer - 1);
+        Item randomItem = swap(list, index, pointer - 1);
         list[--pointer] = null;
         return randomItem;
     }
@@ -45,27 +45,32 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
         return newList;
     }
-    private Item swap(int selected, int tail) {
-        Item middle = list[selected];
-        list[selected] = list[tail];
-        list[tail] = middle;
+    private Item swap(Item[] target, int selected, int tail) {
+        Item middle = target[selected];
+        target[selected] = target[tail];
+        target[tail] = middle;
         return middle;
     }
 
     public Iterator<Item> iterator() { return new RandomQueueIterator(); }
     private class RandomQueueIterator implements Iterator<Item> { // in a random order.
-        int index = pointer;
-        int[] picker = new int[pointer];
-        @Override
-        public boolean hasNext() {
-            return index > 0;
+        int index;
+        Item[] copied;
+        public RandomQueueIterator() {
+            index = 0;
+            copied = (Item[]) new Object[pointer];
+            for (int i = 0; i < pointer; i++) {
+                copied[i] = list[i];
+            }
         }
         @Override
+        public boolean hasNext() { return index < pointer; }
+        @Override
         public Item next() {
-            if (index == 0) throw new NoSuchElementException();
-            int pick = StdRandom.uniform(index);
-            swap(pick, index - 1);
-            return list[--index];
+            if (index >= pointer) throw new NoSuchElementException();
+            int pick = StdRandom.uniform(index, pointer);
+            swap(copied, index, pick);
+            return copied[index++];
         }
         @Override
         public void remove() { throw new UnsupportedOperationException(); }
@@ -77,9 +82,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         test.enqueue(4);
         test.enqueue(5);
         test.enqueue(6);
-//        test.enqueue(7);
-        for (Integer i : test) {
-            StdOut.print(i + ",");
+        test.enqueue(7);
+        test.enqueue(8);
+        for (int i : test) {
+            StdOut.println(i);
+            for (int j : test) {
+                StdOut.print(j + " ");
+            }
+            StdOut.println();
         }
     }
 }

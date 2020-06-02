@@ -1,3 +1,5 @@
+package sorts;
+
 import java.util.Comparator;
 
 public class SelectionSort<T> {
@@ -27,11 +29,6 @@ public class SelectionSort<T> {
 
     public static void main(String[] args) {
         Integer[] test = {2, 6, 9, 10, 2, 3, 20, 68, 1, 43, 20, 30};
-        int value = 7;
-        for (int i : test) {
-            System.out.print(i + ",");
-        }
-        System.out.println();
         SelectionSort<Integer> Sort = new SelectionSort<Integer>();
         Sort.sort(test, new Comparator<Integer>() {
             @Override

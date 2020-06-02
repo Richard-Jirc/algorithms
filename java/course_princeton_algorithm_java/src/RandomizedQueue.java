@@ -85,11 +85,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         test.enqueue(7);
         test.enqueue(8);
         for (int i : test) {
-            StdOut.println(i);
-            for (int j : test) {
-                StdOut.print(j + " ");
-            }
-            StdOut.println();
+            StdOut.print(i + ",");
         }
     }
 }

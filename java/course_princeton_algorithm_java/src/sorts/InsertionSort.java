@@ -7,12 +7,9 @@ public class InsertionSort<T> {
     int swapping;
     int comparison;
 
-    public InsertionSort() {
+    public void sort(T[] list, Comparator<T> comparator) {
         swapping = 0;
         comparison = 0;
-    }
-
-    public void sort(T[] list, Comparator<T> comparator) {
         for (int i = 0; i < list.length; i++) {
             if (i == 0) continue;
             for (int j = i; j > 0; j--) {

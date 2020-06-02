@@ -6,11 +6,8 @@ public class SelectionSort<T> {
 
     int numberOfCompare;
 
-    public SelectionSort() {
-        numberOfCompare = 0;
-    }
-
     public void sort(T[] list, Comparator<T> comparator) {
+        numberOfCompare = 0;
         for (int i = 0; i < list.length - 1; i++) {
             int smallest = i;
             for (int j = i + 1; j < list.length; j++) {

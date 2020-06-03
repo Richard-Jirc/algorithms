@@ -29,7 +29,7 @@ public class InsertionSort<T> {
     public static void main(String[] args) {
         Integer[] array = {5, 4, 3, 2, 1, 0};
         InsertionSort<Integer> sort = new InsertionSort<>();
-        sort.sort(array, 3, new Comparator<Integer>() {
+        sort.sort(array, 1, new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
                 return o1 - o2;

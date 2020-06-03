@@ -1,4 +1,4 @@
-
+package self.quickUnion;
 
 public class QuickUnionWeighted {
 

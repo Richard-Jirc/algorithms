@@ -1,4 +1,4 @@
-import java.util.Arrays;
+package self.quickUnion;
 
 public class QuickUnion {
 

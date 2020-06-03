@@ -1,3 +1,5 @@
+package self.queue;
+
 public class QueueByGenericLL<Item> {
 
     Node first;

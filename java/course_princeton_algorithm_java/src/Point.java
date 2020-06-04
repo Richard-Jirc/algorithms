@@ -45,11 +45,11 @@ public class Point implements Comparable<Point> {
 
     public Comparator<Point> slopeOrder() {
         Point host = this;
-        return new slopeComparator(host);
+        return new SlopeComparator(host);
     }
-    private static class slopeComparator implements Comparator<Point> {
+    private static class SlopeComparator implements Comparator<Point> {
         Point origin;
-        public slopeComparator(Point host) {
+        public SlopeComparator(Point host) {
             origin = host;
         }
         @Override

@@ -7,29 +7,34 @@ public class BruteCollinearPoints {
     private int count;
 
     public BruteCollinearPoints(Point[] points) {
-        if (points == null) throw new IllegalArgumentException();
+        if (points == null) throw new IllegalArgumentException("array null");
+
         result = new Stack<>();
-        Point[] temp = new Point[4];
         count = 0;
-        Arrays.sort(points);
-        if (points.length == 1) {
-            if (points[0] == null) throw new IllegalArgumentException();
-        } else {
-            for (int i = 0; i < points.length - 1; i++) {
-                for (int j = 1; j < points.length; j++) {
-                    if (points[i] == null || points[j] == null || points[i].compareTo(points[j]) == 0) throw new IllegalArgumentException();
-                }
+
+        Point[] array = new Point[points.length]; // defensive copy of the array to compute.
+        Point[] temp = new Point[4];              // arbitrarily checking four points at a time.
+
+        for (int i = 0; i < points.length; i++) {
+            if (points[i] == null) throw new IllegalArgumentException("element null"); // constructing defensive copy while checking null.
+            array[i] = points[i];
+        }
+
+        for (int j = 0; j < array.length - 1; j++) {
+            for (int k = j + 1; k < array.length; k++) {
+                if (array[j].compareTo(array[k]) == 0) throw new IllegalArgumentException("duplicate point"); // o(n^2) time to check duplicate points.
             }
         }
-        for (int p = 0; p < points.length - 3; p++) {
-            temp[0] = points[p];
-            for (int q = p + 1; q < points.length - 2; q++) {
-                temp[1] = points[q];
-                for (int r = q + 1; r < points.length -1; r++) {
-                    temp[2] = points[r];
-                    for (int s = r + 1; s < points.length; s++) {
-                        temp[3] = points[s];
-                        analyze(temp);
+
+        for (int p = 0; p < array.length - 3; p++) {
+            for (int q = p + 1; q < array.length - 2; q++) {
+                for (int r = q + 1; r < array.length -1; r++) {
+                    for (int s = r + 1; s < array.length; s++) {
+                        temp[0] = array[p];
+                        temp[1] = array[q];
+                        temp[2] = array[r];
+                        temp[3] = array[s];
+                        analyze(temp); // o(n^4) time to analyze four points at a time.
                     }
                 }
             }
@@ -52,6 +57,7 @@ public class BruteCollinearPoints {
     }
 
     public int numberOfSegments() { return count; }
+
     public LineSegment[] segments() {
         LineSegment[] copy = new LineSegment[finalResult.length];
         System.arraycopy(finalResult, 0, copy, 0, finalResult.length);
@@ -66,7 +72,8 @@ public class BruteCollinearPoints {
         Point o4 = new Point(6, 0);
         Point o5 = new Point(-1, -1);
         Point o6 = new Point(2, 2);
-        Point[] test = {o1, o2, o3, o4, o5, o6};
+        Point o7 = new Point(-3, -3);
+        Point[] test = {o1, o2, o3, o4, o5, o6, o7};
         BruteCollinearPoints findIt = new BruteCollinearPoints(test);
         for (LineSegment i : findIt.segments()) {
             System.out.println(i);

@@ -2,51 +2,52 @@ import java.util.Arrays;
 import edu.princeton.cs.algs4.Stack;
 
 public class FastCollinearPoints {
-
     private int count;
     private final Stack<LineSegment> storeResult;
     private final LineSegment[] finalResult;
 
     public FastCollinearPoints(Point[] points) {
-        if (points == null) throw new IllegalArgumentException();
+        if (points == null) throw new IllegalArgumentException("array null");
 
         storeResult = new Stack<>();
         count = 0;
         double detection = Double.NEGATIVE_INFINITY;
-        Point[] clusters = new Point[points.length];
         int increment = 0;
+        Point[] array = new Point[points.length];
+        Point[] clusters = new Point[points.length];
 
-        Point[] searchSeq = new Point[points.length]; // to maintain an array for traversing points in a proper order
-        for (int i = 0; i < points.length; i++) {
-            if (points[i] == null) throw new IllegalArgumentException(); // check null by the way.
+        Point[] searchSeq = new Point[array.length]; // to maintain an array for traversing points in a proper order
+        for (int i = 0; i < array.length; i++) {
+            if (points[i] == null) throw new IllegalArgumentException("element null"); // check null by the way.
             searchSeq[i] = points[i];
+            array[i] = points[i];
         }
 
         for (Point origin : searchSeq) {
-            Arrays.sort(points, origin.slopeOrder());
-            for (int i = 0; i < points.length; i++) {
+            Arrays.sort(array, origin.slopeOrder());
+            for (int i = 0; i < array.length; i++) {
                 if (i == 0) continue;
                 if (i == 1) {
                     increment = 0;
-                    detection = points[0].slopeTo(points[i]);
-                    if (detection == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException(); // this finds duplicate points regarding to the origin, as long as there's more than one.
+                    detection = array[0].slopeTo(array[i]);
+                    if (detection == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException("duplicate point"); // this finds duplicate points regarding to the origin, as long as there's more than one.
                 }
                 if (i > 1) {
-                    if (detection != points[0].slopeTo(points[i])) {
+                    if (detection != array[0].slopeTo(array[i])) {
                         if (increment >= 2) { // found 3+ points in a row.
                             checkIfValid(origin, clusters, increment);
                         }
                         increment = 0;
-                        detection = points[0].slopeTo(points[i]);
+                        detection = array[0].slopeTo(array[i]);
                     } else {
                         increment++;
-                        if (i == points.length - 1 && increment >= 2) { // you should also check if there are 3+ points in a row here!
-                            clusters[increment] = points[i];
+                        if (i == array.length - 1 && increment >= 2) { // you should also check if there are 3+ points in a row here!
+                            clusters[increment] = array[i];
                             checkIfValid(origin, clusters, increment);
                         }
                     }
                 }
-                clusters[increment] = points[i];
+                clusters[increment] = array[i];
             }
         }
         finalResult = new LineSegment[storeResult.size()];

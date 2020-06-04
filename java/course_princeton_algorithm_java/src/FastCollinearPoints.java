@@ -11,12 +11,12 @@ public class FastCollinearPoints {
 
         storeResult = new Stack<>();
         count = 0;
-        double detection = Double.NEGATIVE_INFINITY;
-        int increment = 0;
-        Point[] array = new Point[points.length];
-        Point[] clusters = new Point[points.length];
 
+        double detection = Double.NEGATIVE_INFINITY;
+        int startIndex = 0, endIndex = 0;
+        Point[] array = new Point[points.length];
         Point[] searchSeq = new Point[array.length]; // to maintain an array for traversing points in a proper order
+
         for (int i = 0; i < array.length; i++) {
             if (points[i] == null) throw new IllegalArgumentException("element null"); // check null by the way.
             searchSeq[i] = points[i];
@@ -28,26 +28,26 @@ public class FastCollinearPoints {
             for (int i = 0; i < array.length; i++) {
                 if (i == 0) continue;
                 if (i == 1) {
-                    increment = 0;
+                    startIndex = i;
+                    endIndex = i;
                     detection = array[0].slopeTo(array[i]);
                     if (detection == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException("duplicate point"); // this finds duplicate points regarding to the origin, as long as there's more than one.
                 }
                 if (i > 1) {
                     if (detection != array[0].slopeTo(array[i])) {
-                        if (increment >= 2) { // found 3+ points in a row.
-                            checkIfValid(origin, clusters, increment);
+                        if (endIndex - startIndex >= 2) { // found 3+ points in a row.
+                            checkIfValid(origin, startIndex, endIndex, array);
                         }
-                        increment = 0;
+                        startIndex = i;
+                        endIndex = i;
                         detection = array[0].slopeTo(array[i]);
                     } else {
-                        increment++;
-                        if (i == array.length - 1 && increment >= 2) { // you should also check if there are 3+ points in a row here!
-                            clusters[increment] = array[i];
-                            checkIfValid(origin, clusters, increment);
+                        endIndex++;
+                        if (i == array.length - 1 && endIndex - startIndex >= 2) { // you should also check if there are 3+ points in a row here!
+                            checkIfValid(origin, startIndex, endIndex, array);
                         }
                     }
                 }
-                clusters[increment] = array[i];
             }
         }
         finalResult = new LineSegment[storeResult.size()];
@@ -56,18 +56,16 @@ public class FastCollinearPoints {
         }
 
     }
-    private void checkIfValid(Point origin, Point[] clusters, int increment) {
-        Point[] group = new Point[increment + 1];
-        System.arraycopy(clusters, 0, group, 0, group.length);
+    private void checkIfValid(Point origin, int start, int end, Point[] array) {
+        Point[] group = new Point[end - start + 1];
+        System.arraycopy(array, start, group, 0, group.length);
         Arrays.sort(group);
         if (origin.compareTo(group[0]) >= 0) { return; }
         storeResult.push(new LineSegment(origin, group[group.length - 1]));
         count++;
     }
 
-    public int numberOfSegments() {
-        return count;
-    }
+    public int numberOfSegments() { return count; }
 
     public LineSegment[] segments() {
         LineSegment[] copy = new LineSegment[finalResult.length]; // defensive copied array to return.

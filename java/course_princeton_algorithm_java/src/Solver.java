@@ -1,6 +1,5 @@
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Queue;
-import edu.princeton.cs.algs4.Stack;
 
 import java.util.Iterator;
 

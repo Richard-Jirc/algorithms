@@ -119,7 +119,7 @@ public class Solver {
                 k++;
             }
         }
-        array = new int[][]{{5, 3, 6}, {8, 1, 2}, {7, 4, 0}};
+        array = new int[][]{{0, 1, 3}, {4, 2, 5}, {7, 8, 6}};
         Board test = new Board(array);
         System.out.println(test.toString());
 

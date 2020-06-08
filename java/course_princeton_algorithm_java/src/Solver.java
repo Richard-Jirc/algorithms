@@ -1,17 +1,18 @@
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.Stack;
 
 import java.util.Iterator;
 
 public class Solver {
-    private MinPQ<SearchNode> queue;
-    private Stack<Board> solutionSeq;
-    private final boolean solvable;
-    private int totalMoves = 0;
+    private MinPQ<SearchNode> queue, queueMirror;
+    private Queue<Board> solutionSeq;
+    private boolean solvable;
+    private int totalMoves = 0, totalMirror = 0;
     private static class SearchNode implements Comparable<SearchNode> {
         Board board;
         Board previous;
-        int moves, manhattan, priority;
+        int moves, manhattan, priority, hamming;
         public SearchNode(Board content, int move, Board prev) {
             board = content;
             previous = prev;
@@ -31,40 +32,74 @@ public class Solver {
             solvable = true;
             return;
         }
-        solvable = this.isSolvable();
         queue = new MinPQ<>();
-        solutionSeq = new Stack<>();
+        queueMirror = new MinPQ<>();
+
+        solutionSeq = new Queue<>();
+
         SearchNode first = new SearchNode(initial, 0, null);
+        SearchNode firstMirror = new SearchNode(initial.twin(), 0, null);
+
+
+
         queue.insert(first);
-        this.search();
+        queueMirror.insert(firstMirror);
+        this.searchLockStep();
     }
-    private void search() {
-        SearchNode least;
-        do {
+
+    private SearchNode lockstepSearch(MinPQ queue, int move) {
+        
+    }
+
+    private void searchLockStep() {
+        SearchNode least, leastMirror;
+        while (totalMoves < 10000 && totalMirror < 10000) {
             least = queue.delMin();
-            solutionSeq.push(least.board);
+            leastMirror = queueMirror.delMin();
+            solutionSeq.enqueue(least.board);
+            if (least.board.isGoal()) {
+                solvable = true;
+                break;
+            } else if (leastMirror.board.isGoal()) {
+                solvable = false;
+                break;
+            }
             totalMoves++;
-            Iterable<Board> children = least.board.neighbors();
-            for (Board each : children) {
+            totalMirror++;
+            Iterator<Board> children = least.board.neighbors().iterator();
+            Iterator<Board> childrenMirror = leastMirror.board.neighbors().iterator();
+            while (children.hasNext() && childrenMirror.hasNext()) {
+                Board each = children.next();
+                Board eachMirror = childrenMirror.next();
+                SearchNode nextNode = new SearchNode(each, totalMoves, least.board);
+                SearchNode nextNodeMirror = new SearchNode(eachMirror, totalMoves, least.board);
                 if (least.previous != null) {
                     if (!each.equals(least.previous)) {
-                        queue.insert(new SearchNode(each, totalMoves, least.board));
+                        queue.insert(nextNode);
                     }
                 } else {
-                    queue.insert(new SearchNode(each, totalMoves, least.board));
+                    queue.insert(nextNode);
+                }
+                if (leastMirror.previous != null) {
+                    if (!eachMirror.equals(leastMirror.previous)) {
+                        queueMirror.insert(nextNodeMirror);
+                    }
+                } else {
+                    queueMirror.insert(nextNodeMirror);
                 }
             }
-        } while (!least.board.isGoal());
+        }
     }
 
     public boolean isSolvable() {
-        return true;
+        return solvable;
     }
 
     public int moves() {
         if (!solvable) return -1;
         return totalMoves;
     }
+
     public Iterable<Board> solution() {
         if (!solvable) return null;
         return new Iterable<Board>() {
@@ -85,17 +120,21 @@ public class Solver {
                 k++;
             }
         }
-        array[2][1] = 0;
-        array[2][2] = 8;
+        array = new int[][]{{0, 1, 3}, {2, 5, 4}, {7, 8, 6}};
         Board test = new Board(array);
         System.out.println(test.toString());
 
         Solver solveIt = new Solver(test);
-        System.out.println("totalMoves:" + solveIt.totalMoves);
-        int huh = 1;
-        for (Board step : solveIt.solution()) {
-            System.out.println("Step " + huh + ": " + step.toString());
-            huh++;
+        System.out.println("totalMoves:" + solveIt.moves());
+        int huh = 0;
+        if (solveIt.isSolvable()) {
+            for (Board step : solveIt.solution()) {
+                System.out.println("Step " + huh + ": " + step.toString());
+                huh++;
+            }
+        } else {
+            System.out.println(solveIt.solution());
         }
+
     }
 }

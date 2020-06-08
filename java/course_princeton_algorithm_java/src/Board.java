@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.Stack;
+import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
 
@@ -58,8 +59,8 @@ public class Board {
                 if (data[i][j] == position + 1) continue;
                 if (data[i][j] == 0) continue;
 
-                int targetRow = data[i][j] / size, targetCol = data[i][j] % size;
-                if (targetCol == 0) targetCol = size;
+                int targetRow = data[i][j] / size, targetCol = data[i][j] % size - 1;
+                if (targetCol == -1) targetCol = size - 1;
                 sum += Math.abs(targetRow - i) + Math.abs(targetCol - j);
             }
         }
@@ -83,44 +84,47 @@ public class Board {
         return true;
     }
 
-    public boolean equals(Board y) {
-        return this.toString().equals(y.toString());
+    public boolean equals(Object y) {
+        if (y == this) return true;
+        if (y == null) return false;
+        if (y.getClass() != this.getClass()) return false;
+        Board compare = (Board) y;
+        if (this.dimension() != compare.dimension()) return false;
+        return this.toString().equals(compare.toString());
     }
 
     public Iterable<Board> neighbors() {
-        return new neighborIterable();
-    }
-
-    private class neighborIterable implements Iterable<Board>{
-        Board[] children;
-        public neighborIterable() {
-            int[][] neighbors = findNeighbor();
-            int[] zero = findBlank();
-            children = new Board[neighbors.length];
-            for (int i = 0; i < neighbors.length; i++) {
-                children[i] = new Board(swap(zero, neighbors[i]));
+        int[][] neighbors = findNeighbor();
+        int[] zero = findBlank();
+        Board[] children = new Board[neighbors.length];
+        for (int i = 0; i < neighbors.length; i++) {
+            children[i] = new Board(swap(zero, neighbors[i]));
+        }
+        return () -> new Iterator<Board>() {
+            int index = 0;
+            @Override
+            public boolean hasNext() {
+                return index != children.length;
             }
-        }
-        @Override
-        public Iterator<Board> iterator() {
-            return new Iterator<Board>() {
-                int index = 0;
-                @Override
-                public boolean hasNext() {
-                    return index != children.length;
-                }
-                @Override
-                public Board next() {
-                    return children[index++];
-                }
-            };
-        }
+            @Override
+            public Board next() {
+                return children[index++];
+            }
+        };
     }
 
     public Board twin() {
-        int[] randomOne = this.findNeighbor()[0];
-        int[] zero = this.findBlank();
-        return new Board(swap(zero, randomOne));
+        int[] zero = findBlank();
+        int rdRow1, rdRow2, rdCol1, rdCol2;
+        do {
+            rdRow1 = StdRandom.uniform(size);
+            rdCol1 = StdRandom.uniform(size);
+        } while (rdRow1 == zero[0] || rdCol1 == zero[1]);
+        do {
+            rdRow2 = StdRandom.uniform(size);
+            rdCol2 = StdRandom.uniform(size);
+        } while (rdRow2 == zero[0] || rdCol2 == zero[1] || rdRow2 == rdRow1 || rdCol2 == rdCol1);
+        return new Board(swap(new int[]{rdRow1, rdCol1}, new int[]{rdRow2, rdCol2}));
     }
 
     // just the [row, col] of blank element.
@@ -179,7 +183,7 @@ public class Board {
 
 
     public static void main(String[] args) {
-        int[][] array = new int[5][5];
+        int[][] array = new int[3][3];
         int k = 1;
         for (int[] i : array) {
             int p = 0;
@@ -188,8 +192,11 @@ public class Board {
                 k++;
             }
         }
-        array[3][3] = 0;
+        array[2][0] = 0;
+        array[2][1] = 7;
+        array[2][2] = 8;
         Board test = new Board(array);
         System.out.println(test.toString());
+        System.out.println(test.twin().toString());
     }
 }

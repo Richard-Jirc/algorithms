@@ -8,7 +8,7 @@ public class Solver {
     private MinPQ<SearchNode> queue, queueMirror;
     private Queue<Board> solutionSeq;
     private boolean solvable;
-    private int totalMoves = 0, totalMirror = 0;
+    private int totalMoves = 0;
     private static class SearchNode implements Comparable<SearchNode> {
         Board board;
         Board previous;
@@ -18,10 +18,21 @@ public class Solver {
             previous = prev;
             moves = move;
             manhattan = content.manhattan();
-            priority = manhattan + moves; // the critical priority variable.
+            priority = manhattan + moves; // the critical priority function.
         }
         @Override
         public int compareTo(SearchNode node) {
+            if (this.board.isGoal()) return -1;
+            if (node.board.isGoal()) return 1;
+            if (this.priority == node.priority) {
+//                if (this.previous != null) {
+//                    if (this.previous.equals(node.board)) return 1;
+//                }
+//                if (node.previous != null) {
+//                    if (node.previous.equals(this.board)) return -1;
+//                }
+                return this.moves - node.moves;
+            }
             return this.priority - node.priority;
         }
     }
@@ -40,55 +51,44 @@ public class Solver {
         SearchNode first = new SearchNode(initial, 0, null);
         SearchNode firstMirror = new SearchNode(initial.twin(), 0, null);
 
-
-
         queue.insert(first);
         queueMirror.insert(firstMirror);
-        this.searchLockStep();
+        this.lockstepSearch();
     }
-
-    private SearchNode lockstepSearch(MinPQ queue, int move) {
-        
-    }
-
-    private void searchLockStep() {
-        SearchNode least, leastMirror;
-        while (totalMoves < 10000 && totalMirror < 10000) {
-            least = queue.delMin();
-            leastMirror = queueMirror.delMin();
-            solutionSeq.enqueue(least.board);
-            if (least.board.isGoal()) {
+    private void lockstepSearch() {
+        SearchNode result, resultMirror;
+        do {
+            result = pushSearch(queue, totalMoves);
+            resultMirror = pushSearch(queueMirror, totalMoves);
+            totalMoves++;
+            solutionSeq.enqueue(result.board);
+            if (result.board.isGoal()) {
                 solvable = true;
+                totalMoves--;
                 break;
-            } else if (leastMirror.board.isGoal()) {
+            } else if (resultMirror.board.isGoal()) {
                 solvable = false;
                 break;
             }
-            totalMoves++;
-            totalMirror++;
-            Iterator<Board> children = least.board.neighbors().iterator();
-            Iterator<Board> childrenMirror = leastMirror.board.neighbors().iterator();
-            while (children.hasNext() && childrenMirror.hasNext()) {
-                Board each = children.next();
-                Board eachMirror = childrenMirror.next();
-                SearchNode nextNode = new SearchNode(each, totalMoves, least.board);
-                SearchNode nextNodeMirror = new SearchNode(eachMirror, totalMoves, least.board);
-                if (least.previous != null) {
-                    if (!each.equals(least.previous)) {
-                        queue.insert(nextNode);
-                    }
-                } else {
-                    queue.insert(nextNode);
+        } while (totalMoves < 10000);
+        if (result.board.isGoal()) solvable = true;
+        else solvable = !resultMirror.board.isGoal();
+    }
+    private SearchNode pushSearch(MinPQ<SearchNode> minQueue, int move) {
+        SearchNode least = minQueue.delMin();
+        move++;
+        Iterable<Board> children = least.board.neighbors();
+        for (Board each : children) {
+            SearchNode nextNode = new SearchNode(each, move, least.board);
+            if (least.previous != null) {
+                if (!each.equals(least.previous)) {
+                    minQueue.insert(nextNode);
                 }
-                if (leastMirror.previous != null) {
-                    if (!eachMirror.equals(leastMirror.previous)) {
-                        queueMirror.insert(nextNodeMirror);
-                    }
-                } else {
-                    queueMirror.insert(nextNodeMirror);
-                }
+            } else {
+                minQueue.insert(nextNode);
             }
         }
+        return least;
     }
 
     public boolean isSolvable() {
@@ -120,7 +120,7 @@ public class Solver {
                 k++;
             }
         }
-        array = new int[][]{{0, 1, 3}, {2, 5, 4}, {7, 8, 6}};
+        array = new int[][]{{5, 3, 6}, {8, 1, 2}, {7, 4, 0}};
         Board test = new Board(array);
         System.out.println(test.toString());
 

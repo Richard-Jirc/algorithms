@@ -10,7 +10,7 @@ public class MinPQ<T extends Comparable<T>> {
     }
     public void insert(T item) {
         list[size] = item;
-        swim(size);
+
     }
     public int size() {
         return size;
@@ -18,10 +18,10 @@ public class MinPQ<T extends Comparable<T>> {
     public boolean isEmpty() {
         return size == 0;
     }
-    private void sink(int index) {
+    private void sink(T item) {
 
     }
-    private void swim(int index) {
+    private void swim(T item) {
 
     }
 

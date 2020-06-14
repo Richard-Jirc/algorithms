@@ -1,13 +1,18 @@
 package self.pq;
 
+import edu.princeton.cs.algs4.StdDraw;
+
+import java.util.Comparator;
+
 public class MinPQ<T extends Comparable<T>> {
 
-    private T[] list;
+    private final T[] list;
     private int size;
 
-    // [0, 1,2, 3,4,5,6, 7,8,9,10,11,12,13,14]
+    //  -,"1","2",   "4",            "8",         ...
+    // [0, 1, 2,3, 4,5,6,7, 8,9,10,11,12,13,14,15 ...]
     public MinPQ() {
-        list = (T[]) new Object[7];
+        list = (T[]) new Comparable[8];
     }
     public void insert(T item) {
         list[size] = item;
@@ -23,14 +28,19 @@ public class MinPQ<T extends Comparable<T>> {
 
     }
     private void swim(int index) {
-
+        while (list[index / 2].compareTo(list[index]) >= 0 && index > 1) {
+            swap(index, index / 2);
+            index /= 2;
+        }
     }
-
-    private void resize(int grow) {
-        
+    private void swap(int a, int b) {
+        T mid = list[b];
+        list[b] = list[a];
+        list[a] = mid;
     }
 
     public static void main(String[] args) {
-
+        StdDraw.setCanvasSize(800, 600);
+        StdDraw.point(1, 1);
     }
 }

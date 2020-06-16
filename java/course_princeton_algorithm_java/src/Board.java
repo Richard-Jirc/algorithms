@@ -4,16 +4,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class Board {
-
     private final int[][] data;
     private final int size;
 
-    // tiles = int[row][col] row ~ (0, n - 1) / col ~ (0, n - 1)
-    // {
-    // row 0: [col 0, col 1..]
-    // row 1: ...
-    // }
-    // value: blank = 0, normal [1, n^2 - 1]
+    /** BOARD CONSTRUCTOR
+     *  {
+     *     row 0: [col 0, col 1..]
+     *     row 1: ...
+     *  }
+     * @param tiles int[row][col] row ~ (0, n - 1) / col ~ (0, n - 1)
+     *              value: blank = 0, normal [1, n^2 - 1]
+     */
     public Board(int[][] tiles) {
         size = tiles.length;
         data = new int[size][size];

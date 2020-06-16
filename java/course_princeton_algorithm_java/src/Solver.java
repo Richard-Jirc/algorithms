@@ -1,4 +1,3 @@
-import com.sun.xml.internal.bind.v2.TODO;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Queue;
 
@@ -7,7 +6,7 @@ import java.util.Iterator;
 public class Solver {
 
     private final MinPQ<SearchNode> queue, queueMirror; // minPQ to track game tree
-    private Queue<Board> solutionSeq; // queue to store removed least priority board.
+    private final Queue<Board> solutionSeq; // queue to store removed least priority board.
 
     private boolean solvable;
 
@@ -31,7 +30,9 @@ public class Solver {
         @Override
         public int compareTo(SearchNode node) {
             if (this.priority == node.priority) {
-                return node.moves - this.moves; // if tie by priority function,
+                /* if tie by priority function,
+                   the one with bigger moves are placed closer to the top */
+                return node.moves - this.moves; //
             }
             return this.priority - node.priority;
         }
@@ -74,14 +75,13 @@ public class Solver {
                 break;
             }
         } while (move < 10000);
-        System.out.println(move);
     }
     private SearchNode pushSearch(MinPQ<SearchNode> minQueue, int currentDepth) {
         SearchNode least;
         do {
             least = minQueue.delMin();
             if (least.board.isGoal()) break;
-        } while(least.moves != currentDepth - 1);
+        } while (least.moves != currentDepth - 1);
 
         Iterable<Board> children = least.board.neighbors();
 
@@ -118,16 +118,7 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        int[][] array = new int[3][3];
-        int k = 1;
-        for (int[] i : array) {
-            int p = 0;
-            for (int j : i) {
-                i[p++] = k;
-                k++;
-            }
-        }
-        array = new int[][]{{0, 1, 3}, {4, 5, 2}, {8, 7, 6}};
+        int[][] array = new int[][]{{0, 1, 3}, {4, 5, 2}, {7, 6, 8}};
         Board test = new Board(array);
         System.out.println(test.toString());
 

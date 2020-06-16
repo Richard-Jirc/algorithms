@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Board {
 
@@ -108,6 +109,7 @@ public class Board {
             }
             @Override
             public Board next() {
+                if (!this.hasNext()) throw new NoSuchElementException();
                 return children[index++];
             }
         };
@@ -116,6 +118,7 @@ public class Board {
     public Board twin() {
         int[] zero = findBlank();
         int rdRow1, rdRow2, rdCol1, rdCol2;
+        
         do {
             rdRow1 = StdRandom.uniform(size);
             rdCol1 = StdRandom.uniform(size);
@@ -183,15 +186,6 @@ public class Board {
 
 
     public static void main(String[] args) {
-        int[][] array = new int[3][3];
-        int k = 1;
-        for (int[] i : array) {
-            int p = 0;
-            for (int j : i) {
-                i[p++] = k;
-                k++;
-            }
-        }
         Board test = new Board(new int[][]{new int[]{8, 1, 3}, new int[]{4, 0, 2}, new int[]{7, 6, 5}});
         System.out.println(test.toString());
         System.out.println(test.manhattan());

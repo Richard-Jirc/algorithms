@@ -1,20 +1,19 @@
 import edu.princeton.cs.algs4.MinPQ;
-import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.Stack;
 
 import java.util.Iterator;
 
 public class Solver {
-
-    private final MinPQ<SearchNode> queue, queueMirror; // minPQ to track game tree
-    private final Queue<Board> solutionSeq; // queue to store removed least priority board.
-
+    private final Stack<Board> solutionSeq; // queue to store removed least priority board.
     private boolean solvable;
 
+    /** HELPER CLASS SearchNode
+     */
     private static class SearchNode implements Comparable<SearchNode> {
         Board board;
-        Board previous;
+        SearchNode previous;
         int moves, manhattan, priority;
-        public SearchNode(Board content, int move, Board prev) {
+        public SearchNode(Board content, int move, SearchNode prev) {
             board = content;
             previous = prev;
             moves = move;
@@ -32,63 +31,55 @@ public class Solver {
             if (this.priority == node.priority) {
                 /* if tie by priority function,
                    the one with bigger moves are placed closer to the top */
-                return node.moves - this.moves; //
+                return this.moves - node.moves; //
             }
             return this.priority - node.priority;
         }
-        public static boolean less(SearchNode a, SearchNode b) {
-            return a.compareTo(b) < 0;
-        }
     }
 
+    /** CONSTRUCTOR
+     *  create two minPQs for initial Board and its twin()
+     *  then lockstep search for each of them.
+     */
     public Solver(Board initial) {
         if (initial == null) throw new IllegalArgumentException();
-        queue = new MinPQ<>();
-        queueMirror = new MinPQ<>();
-        solutionSeq = new Queue<>();
+        solutionSeq = new Stack<>();
 
-        if (initial.isGoal()) {
-            solvable = true;
-            return;
-        }
+        MinPQ<SearchNode> queue = new MinPQ<>();
+        MinPQ<SearchNode> queueMirror = new MinPQ<>();
 
         queue.insert(new SearchNode(initial, 0, null));
         queueMirror.insert(new SearchNode(initial.twin(), 0, null));
 
-        this.lockstepSearch();
-    }
-    private void lockstepSearch() {
         SearchNode result, resultMirror;
-        int move = 0;
-        do {
-            move++;
-            result = pushSearch(queue, move);
-            resultMirror = pushSearch(queueMirror, move);
-
-            solutionSeq.enqueue(result.board);
-
+        int count = 0;
+        while (true) {
+            count++;
+            result = pushSearch(queue);
+            resultMirror = pushSearch(queueMirror);
             if (result.board.isGoal()) {
                 solvable = true;
+                traceSolution(result);
                 break;
             } else if (resultMirror.board.isGoal()) {
                 solvable = false;
                 break;
             }
-        } while (move < 10000);
+        }
+        System.out.println(count);
     }
-    private SearchNode pushSearch(MinPQ<SearchNode> minQueue, int currentDepth) {
-        SearchNode least;
-        do {
-            least = minQueue.delMin();
-            if (least.board.isGoal()) break;
-        } while (least.moves != currentDepth - 1);
+
+    /** LOCK STEP SEARCH HELPER FUNCTION
+     */
+    private SearchNode pushSearch(MinPQ<SearchNode> minQueue) {
+        SearchNode least = minQueue.delMin();
+        if (least.board.isGoal()) return least;
 
         Iterable<Board> children = least.board.neighbors();
-
         for (Board each : children) {
-            SearchNode nextNode = new SearchNode(each, currentDepth, least.board);
+            SearchNode nextNode = new SearchNode(each, least.moves + 1, least);
             if (least.previous != null) {
-                if (!each.equals(least.previous)) {
+                if (!each.equals(least.previous.board)) {
                     minQueue.insert(nextNode);
                 }
             } else {
@@ -98,13 +89,24 @@ public class Solver {
         return least;
     }
 
+    /** SOLUTION STACK CONSTRUCTOR
+     *  once got the final solution,
+     *  trace backward through the game tree to construct the solution path!
+    */
+    private void traceSolution(SearchNode finalResult) {
+        while (finalResult != null) {
+            solutionSeq.push(finalResult.board);
+            finalResult = finalResult.previous;
+        }
+    }
+
     public boolean isSolvable() {
         return solvable;
     }
 
     public int moves() {
         if (!solvable) return -1;
-        return solutionSeq.size() - 1;
+        return Math.max(solutionSeq.size() - 1, 0);
     }
 
     public Iterable<Board> solution() {
@@ -118,7 +120,7 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        int[][] array = new int[][]{{0, 1, 3}, {4, 5, 2}, {7, 6, 8}};
+        int[][] array = new int[][]{{4, 1, 3}, {6, 0, 2}, {7, 8, 5}};
         Board test = new Board(array);
         System.out.println(test.toString());
 

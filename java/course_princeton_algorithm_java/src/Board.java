@@ -1,5 +1,4 @@
 import edu.princeton.cs.algs4.Stack;
-import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -117,20 +116,24 @@ public class Board {
 
     public Board twin() {
         int[] zero = findBlank();
-        int rdRow1, rdRow2, rdCol1, rdCol2;
-        
-        do {
-            rdRow1 = StdRandom.uniform(size);
-            rdCol1 = StdRandom.uniform(size);
-        } while (rdRow1 == zero[0] || rdCol1 == zero[1]);
-        do {
-            rdRow2 = StdRandom.uniform(size);
-            rdCol2 = StdRandom.uniform(size);
-        } while (rdRow2 == zero[0] || rdCol2 == zero[1] || rdRow2 == rdRow1 || rdCol2 == rdCol1);
-        return new Board(swap(new int[]{rdRow1, rdCol1}, new int[]{rdRow2, rdCol2}));
+        Stack<int[]> positions = new Stack<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (i == zero[0] && j == zero[1]) continue;
+                positions.push(new int[]{i, j});
+                if (positions.size() == 2) break;
+            }
+            if (positions.size() == 2) break;
+        }
+        int[] first, second;
+        first = positions.pop();
+        second = positions.pop();
+        return new Board(swap(first, second));
     }
 
-    // just the [row, col] of blank element.
+    /** HELPER: BLANK POSITION FINDER
+     * @return [row, col] of blank element.
+     */
     private int[] findBlank() {
         int[] zero = new int[2];
         for (int i = 0; i < size; i++) {
@@ -145,7 +148,9 @@ public class Board {
         return zero;
     }
 
-    // returns all the swappable neighbor
+    /** HELPER: NEIGHBOR Board ARRAY FINDER
+     * @return int[][] of all the swappable neighbor
+     */
     private int[][] findNeighbor() {
         Stack<int[]> result = new Stack<>();
         int[] zero = this.findBlank();
@@ -171,7 +176,9 @@ public class Board {
         return neighbors;
     }
 
-    // return a new data list for duplicate Board object.
+    /** HELPER: Board ARRAY SWAPPER
+     * @return a new data list for duplicate Board object
+     */
     private int[][] swap(int[] location1, int[] location2) {
         int[][] list = new int[size][size];
         for (int i = 0; i < size; i++) {
@@ -184,10 +191,9 @@ public class Board {
         return list;
     }
 
-
     public static void main(String[] args) {
         Board test = new Board(new int[][]{new int[]{8, 1, 3}, new int[]{4, 0, 2}, new int[]{7, 6, 5}});
         System.out.println(test.toString());
-        System.out.println(test.manhattan());
+        System.out.println(test.twin().toString());
     }
 }

@@ -25,15 +25,12 @@ public class Solver {
         @Override
         public int compareTo(SearchNode node) {
             if (this.priority == node.priority) {
-//                if (this.previous != null) {
-//                    if (this.previous.equals(node.board)) return 1;
-//                }
-//                if (node.previous != null) {
-//                    if (node.previous.equals(this.board)) return -1;
-//                }
                 return this.moves - node.moves;
             }
             return this.priority - node.priority;
+        }
+        public static boolean less(SearchNode a, SearchNode b) {
+            return a.compareTo(b) < 0;
         }
     }
 

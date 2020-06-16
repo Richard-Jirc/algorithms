@@ -44,7 +44,9 @@ public class Board {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 position = i * size + j;
-                if (data[i][j] != position + 1) count++;
+                if (data[i][j] != position + 1 && data[i][j] != 0) {
+                    count++;
+                }
             }
         }
         return count;
@@ -58,9 +60,7 @@ public class Board {
                 position = i * size + j;
                 if (data[i][j] == position + 1) continue;
                 if (data[i][j] == 0) continue;
-
-                int targetRow = data[i][j] / size, targetCol = data[i][j] % size - 1;
-                if (targetCol == -1) targetCol = size - 1;
+                int targetRow = (data[i][j] - 1) / size, targetCol = (data[i][j] - 1) % size;
                 sum += Math.abs(targetRow - i) + Math.abs(targetCol - j);
             }
         }
@@ -192,11 +192,8 @@ public class Board {
                 k++;
             }
         }
-        array[2][0] = 0;
-        array[2][1] = 7;
-        array[2][2] = 8;
-        Board test = new Board(array);
+        Board test = new Board(new int[][]{new int[]{8, 1, 3}, new int[]{4, 0, 2}, new int[]{7, 6, 5}});
         System.out.println(test.toString());
-        System.out.println(test.twin().toString());
+        System.out.println(test.manhattan());
     }
 }

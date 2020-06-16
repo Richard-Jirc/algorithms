@@ -120,7 +120,7 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        int[][] array = new int[][]{{4, 1, 3}, {6, 0, 2}, {7, 8, 5}};
+        int[][] array = new int[][]{{4, 3, 1}, {6, 0, 2}, {7, 8, 5}};
         Board test = new Board(array);
         System.out.println(test.toString());
 

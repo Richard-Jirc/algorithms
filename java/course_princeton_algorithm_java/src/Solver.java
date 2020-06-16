@@ -15,14 +15,15 @@ public class Solver {
         public SearchNode(Board content, int move, Board prev) {
             board = content;
             previous = prev;
-            moves = move;
-            manhattan = content.manhattan();
-            priority = manhattan + moves; // the critical priority function.
+            if (content.isGoal()) priority = 0;
+            else {
+                moves = move;
+                manhattan = content.manhattan();
+                priority = manhattan + moves; // the critical priority function.
+            }
         }
         @Override
         public int compareTo(SearchNode node) {
-            if (this.board.isGoal()) return -1;
-            if (node.board.isGoal()) return 1;
             if (this.priority == node.priority) {
 //                if (this.previous != null) {
 //                    if (this.previous.equals(node.board)) return 1;
@@ -44,7 +45,6 @@ public class Solver {
         }
         queue = new MinPQ<>();
         queueMirror = new MinPQ<>();
-
         solutionSeq = new Queue<>();
 
         SearchNode first = new SearchNode(initial, 0, null);

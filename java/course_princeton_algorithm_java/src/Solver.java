@@ -7,8 +7,7 @@ public class Solver {
     private final Stack<Board> solutionSeq; // queue to store removed least priority board.
     private boolean solvable;
 
-    /** HELPER CLASS SearchNode
-     */
+    /** HELPER CLASS SearchNode */
     private static class SearchNode implements Comparable<SearchNode> {
         Board board;
         SearchNode previous;
@@ -70,10 +69,15 @@ public class Solver {
     }
 
     /** LOCK STEP SEARCH HELPER FUNCTION
+     * return the minimum SearchNode in minPQ,
+     * insert its *NON-duplicate* children if not goal
+     * @param minQueue the minPQ to operate on
      */
     private SearchNode pushSearch(MinPQ<SearchNode> minQueue) {
         SearchNode least = minQueue.delMin();
         if (least.board.isGoal()) return least;
+
+        Stack<Board> history = new Stack<>();
 
         Iterable<Board> children = least.board.neighbors();
         for (Board each : children) {
@@ -91,7 +95,7 @@ public class Solver {
 
     /** SOLUTION STACK CONSTRUCTOR
      *  once got the final solution,
-     *  trace backward through the game tree to construct the solution path!
+     *  trace backward through the game tree to construct the solution path.
     */
     private void traceSolution(SearchNode finalResult) {
         while (finalResult != null) {

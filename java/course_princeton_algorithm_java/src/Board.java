@@ -1,40 +1,40 @@
 import edu.princeton.cs.algs4.Stack;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 public class Board {
     private final int[][] data;
+    private final char[] list;
     private final int size;
     private int hamming, manhattan;
 
     /** BOARD CONSTRUCTOR
-     *  {
-     *     row 0: [col 0, col 1..]
-     *     row 1: ...
-     *  }
+     *  [ 0:_, 1:_, ... ]
      * @param tiles int[row][col] row ~ (0, n - 1) / col ~ (0, n - 1)
      *              value: blank = 0, normal [1, n^2 - 1]
      */
     public Board(int[][] tiles) {
         size = tiles.length;
         data = new int[size][size];
+        list = new char[size * size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                list[i * size + j] = (char) tiles[i][j];
+            }
+        }
         for (int i = 0; i < size; i++) {
             System.arraycopy(tiles[i], 0, data[i], 0, size);
         }
         int position;
 
         /* HAMMING distance */
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                position = i * size + j;
-                if (data[i][j] != position + 1 && data[i][j] != 0) {
-                    hamming++;
-                }
-            }
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] != i + 1) hamming++;
         }
 
         /* MANHATTAN distance */
+        for (int i = 0; i < list.length; i++) {
+            int targetRow = (list[i] - 1) / size, targetCol = (list[i] - 1) % size;
+            int currentRow = i / size, currentCol = i % size;
+        }
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 position = i * size + j;
@@ -49,12 +49,18 @@ public class Board {
     public String toString() {
         StringBuilder result;
         result = new StringBuilder(size + "\n");
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                result.append(" ").append(data[i][j]);
-            }
-            result.append("\n");
+        int count = 0;
+        for (char i : list) {
+            result.append(" ").append(i);
+            if (count % size == size - 1) result.append("\n");
+            count++;
         }
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                result.append(" ").append(data[i][j]);
+//            }
+//            result.append("\n");
+//        }
         return result.toString();
     }
 
@@ -193,11 +199,9 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        int[][] hey = new int[][]{new int[]{1, 2, 3}, new int[]{0, 7, 6}, new int[]{5, 4, 8}};
+        int[][] hey = new int[][]{new int[]{15, 2, 3}, new int[]{0, 7, 6}, new int[]{5, 4, 8}};
         Board test = new Board(hey);
-        Board what = new Board(hey);
-        System.out.println(test == what);
 
-        System.out.println(test.twin().toString());
+        System.out.println(test.toString());
     }
 }

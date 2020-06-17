@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 public class Board {
     private final int[][] data;
     private final int size;
+    private int hamming, manhattan;
 
     /** BOARD CONSTRUCTOR
      *  {
@@ -20,6 +21,28 @@ public class Board {
         data = new int[size][size];
         for (int i = 0; i < size; i++) {
             System.arraycopy(tiles[i], 0, data[i], 0, size);
+        }
+        int position;
+
+        /* HAMMING distance */
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                position = i * size + j;
+                if (data[i][j] != position + 1 && data[i][j] != 0) {
+                    hamming++;
+                }
+            }
+        }
+
+        /* MANHATTAN distance */
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                position = i * size + j;
+                if (data[i][j] == position + 1) continue;
+                if (data[i][j] == 0) continue;
+                int targetRow = (data[i][j] - 1) / size, targetCol = (data[i][j] - 1) % size;
+                manhattan += Math.abs(targetRow - i) + Math.abs(targetCol - j);
+            }
         }
     }
 
@@ -39,34 +62,9 @@ public class Board {
         return size;
     }
 
-    public int hamming() {
-        int count = 0;
-        int position;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                position = i * size + j;
-                if (data[i][j] != position + 1 && data[i][j] != 0) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
+    public int hamming() { return hamming; }
 
-    public int manhattan() {
-        int sum = 0;
-        int position;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                position = i * size + j;
-                if (data[i][j] == position + 1) continue;
-                if (data[i][j] == 0) continue;
-                int targetRow = (data[i][j] - 1) / size, targetCol = (data[i][j] - 1) % size;
-                sum += Math.abs(targetRow - i) + Math.abs(targetCol - j);
-            }
-        }
-        return sum;
-    }
+    public int manhattan() { return manhattan; }
 
     // check if in place
     public boolean isGoal() {
@@ -104,25 +102,17 @@ public class Board {
         return true;
     }
 
+    /** NEIGHBORS iterable FUNCTION
+     *  you can just return a data structure that implements Iterable!
+     */
     public Iterable<Board> neighbors() {
         int[][] neighbors = findNeighbor();
         int[] zero = findBlank();
-        Board[] children = new Board[neighbors.length];
-        for (int i = 0; i < neighbors.length; i++) {
-            children[i] = new Board(swap(zero, neighbors[i]));
+        Stack<Board> children = new Stack<>();
+        for (int[] neighbor : neighbors) {
+            children.push(new Board(swap(zero, neighbor)));
         }
-        return () -> new Iterator<Board>() {
-            int index = 0;
-            @Override
-            public boolean hasNext() {
-                return index != children.length;
-            }
-            @Override
-            public Board next() {
-                if (!this.hasNext()) throw new NoSuchElementException();
-                return children[index++];
-            }
-        };
+        return children;
     }
 
     public Board twin() {
@@ -203,8 +193,11 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        Board test = new Board(new int[][]{new int[]{8, 1, 3}, new int[]{4, 0, 2}, new int[]{7, 6, 5}});
-        System.out.println(test.toString());
+        int[][] hey = new int[][]{new int[]{1, 2, 3}, new int[]{0, 7, 6}, new int[]{5, 4, 8}};
+        Board test = new Board(hey);
+        Board what = new Board(hey);
+        System.out.println(test == what);
+
         System.out.println(test.twin().toString());
     }
 }

@@ -139,7 +139,7 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        int[][] array = new int[][]{{0, 6, 2}, {4, 5, 1}, {7, 8, 3}};
+        int[][] array = new int[][]{{1, 2, 3}, {0, 7, 6}, {5, 4, 8}};
         Board test = new Board(array);
         System.out.println(test.toString());
 
@@ -154,6 +154,5 @@ public class Solver {
         } else {
             System.out.println(solveIt.solution());
         }
-
     }
 }

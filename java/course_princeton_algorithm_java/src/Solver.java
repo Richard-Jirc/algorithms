@@ -7,8 +7,7 @@ public class Solver {
     private final Stack<Board> solutionSeq; // queue to store removed least priority board.
     private boolean solvable;
 
-    /** HELPER CLASS SearchNode
-     */
+    /** HELPER CLASS SearchNode */
     private static class SearchNode implements Comparable<SearchNode> {
         Board board;
         SearchNode previous;
@@ -23,17 +22,18 @@ public class Solver {
                 priority = manhattan + moves; // the critical priority function.
             }
         }
+        public int getPriority() { return priority; }
         public String toString() {
             return board.toString();
         }
         @Override
         public int compareTo(SearchNode node) {
-            if (this.priority == node.priority) {
+            if (this.getPriority() == node.getPriority()) {
                 /* if tie by priority function,
                    the one with bigger moves are placed closer to the top */
                 return this.moves - node.moves; //
             }
-            return this.priority - node.priority;
+            return this.getPriority() - node.getPriority();
         }
     }
 
@@ -50,11 +50,10 @@ public class Solver {
 
         queue.insert(new SearchNode(initial, 0, null));
         queueMirror.insert(new SearchNode(initial.twin(), 0, null));
-
         SearchNode result, resultMirror;
-        int count = 0;
+//        int count = 0;
         while (true) {
-            count++;
+//            count++;
             result = pushSearch(queue);
             resultMirror = pushSearch(queueMirror);
             if (result.board.isGoal()) {
@@ -66,18 +65,38 @@ public class Solver {
                 break;
             }
         }
-        System.out.println(count);
+//        System.out.println(count);
     }
 
     /** LOCK STEP SEARCH HELPER FUNCTION
+     * return the minimum SearchNode in minPQ,
+     * insert its *NON-duplicate* children if not goal
+     * @param minQueue the minPQ to operate on
      */
     private SearchNode pushSearch(MinPQ<SearchNode> minQueue) {
         SearchNode least = minQueue.delMin();
         if (least.board.isGoal()) return least;
 
         Iterable<Board> children = least.board.neighbors();
+
+//        Stack<SearchNode> history = new Stack<>();
+//        SearchNode leastCp = least;
+//        boolean duplicate;
+
         for (Board each : children) {
             SearchNode nextNode = new SearchNode(each, least.moves + 1, least);
+//            duplicate = false;
+//            while (leastCp != null) {
+//                history.push(leastCp);
+//                leastCp = leastCp.previous;
+//            }
+//            for (SearchNode i : history) {
+//                if (i.board.equals(each) && i.moves < least.moves + 1) {
+//                    duplicate = true;
+//                    break;
+//                }
+//            }
+//            if (!duplicate) minQueue.insert(nextNode);
             if (least.previous != null) {
                 if (!each.equals(least.previous.board)) {
                     minQueue.insert(nextNode);
@@ -91,7 +110,7 @@ public class Solver {
 
     /** SOLUTION STACK CONSTRUCTOR
      *  once got the final solution,
-     *  trace backward through the game tree to construct the solution path!
+     *  trace backward through the game tree to construct the solution path.
     */
     private void traceSolution(SearchNode finalResult) {
         while (finalResult != null) {
@@ -120,7 +139,7 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        int[][] array = new int[][]{{4, 1, 3}, {6, 0, 2}, {7, 8, 5}};
+        int[][] array = new int[][]{{0, 6, 2}, {4, 5, 1}, {7, 8, 3}};
         Board test = new Board(array);
         System.out.println(test.toString());
 

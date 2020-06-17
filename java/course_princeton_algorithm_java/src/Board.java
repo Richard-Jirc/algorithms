@@ -4,16 +4,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class Board {
-
     private final int[][] data;
     private final int size;
 
-    // tiles = int[row][col] row ~ (0, n - 1) / col ~ (0, n - 1)
-    // {
-    // row 0: [col 0, col 1..]
-    // row 1: ...
-    // }
-    // value: blank = 0, normal [1, n^2 - 1]
+    /** BOARD CONSTRUCTOR
+     *  {
+     *     row 0: [col 0, col 1..]
+     *     row 1: ...
+     *  }
+     * @param tiles int[row][col] row ~ (0, n - 1) / col ~ (0, n - 1)
+     *              value: blank = 0, normal [1, n^2 - 1]
+     */
     public Board(int[][] tiles) {
         size = tiles.length;
         data = new int[size][size];
@@ -84,13 +85,23 @@ public class Board {
         return true;
     }
 
+    /** EQUALS METHOD
+     *  overrides object method.
+     *  you need to check the type and null cases,
+     *  before casting the object to the Board type.
+     */
     public boolean equals(Object y) {
         if (y == this) return true;
         if (y == null) return false;
         if (y.getClass() != this.getClass()) return false;
         Board compare = (Board) y;
         if (this.dimension() != compare.dimension()) return false;
-        return this.toString().equals(compare.toString());
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (this.data[i][j] != compare.data[i][j]) return false;
+            }
+        }
+        return true;
     }
 
     public Iterable<Board> neighbors() {

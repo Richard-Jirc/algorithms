@@ -22,17 +22,18 @@ public class Solver {
                 priority = manhattan + moves; // the critical priority function.
             }
         }
+        public int getPriority() { return priority; }
         public String toString() {
             return board.toString();
         }
         @Override
         public int compareTo(SearchNode node) {
-            if (this.priority == node.priority) {
+            if (this.getPriority() == node.getPriority()) {
                 /* if tie by priority function,
                    the one with bigger moves are placed closer to the top */
                 return this.moves - node.moves; //
             }
-            return this.priority - node.priority;
+            return this.getPriority() - node.getPriority();
         }
     }
 
@@ -49,11 +50,10 @@ public class Solver {
 
         queue.insert(new SearchNode(initial, 0, null));
         queueMirror.insert(new SearchNode(initial.twin(), 0, null));
-
         SearchNode result, resultMirror;
-        int count = 0;
+//        int count = 0;
         while (true) {
-            count++;
+//            count++;
             result = pushSearch(queue);
             resultMirror = pushSearch(queueMirror);
             if (result.board.isGoal()) {
@@ -65,7 +65,7 @@ public class Solver {
                 break;
             }
         }
-        System.out.println(count);
+//        System.out.println(count);
     }
 
     /** LOCK STEP SEARCH HELPER FUNCTION
@@ -77,11 +77,26 @@ public class Solver {
         SearchNode least = minQueue.delMin();
         if (least.board.isGoal()) return least;
 
-        Stack<Board> history = new Stack<>();
-
         Iterable<Board> children = least.board.neighbors();
+
+//        Stack<SearchNode> history = new Stack<>();
+//        SearchNode leastCp = least;
+//        boolean duplicate;
+
         for (Board each : children) {
             SearchNode nextNode = new SearchNode(each, least.moves + 1, least);
+//            duplicate = false;
+//            while (leastCp != null) {
+//                history.push(leastCp);
+//                leastCp = leastCp.previous;
+//            }
+//            for (SearchNode i : history) {
+//                if (i.board.equals(each) && i.moves < least.moves + 1) {
+//                    duplicate = true;
+//                    break;
+//                }
+//            }
+//            if (!duplicate) minQueue.insert(nextNode);
             if (least.previous != null) {
                 if (!each.equals(least.previous.board)) {
                     minQueue.insert(nextNode);
@@ -124,7 +139,7 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        int[][] array = new int[][]{{2, 1, 3}, {6, 4, 5}, {8, 0, 7}};
+        int[][] array = new int[][]{{0, 6, 2}, {4, 5, 1}, {7, 8, 3}};
         Board test = new Board(array);
         System.out.println(test.toString());
 

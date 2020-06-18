@@ -51,7 +51,8 @@ public class Board {
         result = new StringBuilder(size + "\n");
         int count = 0;
         for (char i : list) {
-            result.append(" ").append(i);
+            
+            result.append(" ").append(i + "0");
             if (count % size == size - 1) result.append("\n");
             count++;
         }

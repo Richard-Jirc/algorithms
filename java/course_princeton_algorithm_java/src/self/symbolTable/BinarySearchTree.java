@@ -1,5 +1,7 @@
 package self.symbolTable;
 
+import edu.princeton.cs.algs4.Queue;
+
 public class BinarySearchTree<Key extends Comparable<Key>, Value> {
     Node root;
     private class Node {
@@ -12,7 +14,6 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         }
     }
     public BinarySearchTree() {
-
     }
     public boolean isEmpty() {
         return root == null;
@@ -23,6 +24,28 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
      * @return Value if found, null if not exist.
      */
     public Value get(Key key) {
+        Node result = search(root, key);
+        if (result != null) return result.value;
+        else return null;
+    }
+    /**GET method HELPER
+     */
+    private Node search(Node node, Key key) {
+        if (node == null) return null;
+        if (node.key.compareTo(key) == 0) return node;
+        if (node.key.compareTo(key) < 0) return search(node.left, key);
+        else return search(node.right, key);
+    }
+
+    public void put(Key key, Value value) {
+
+    }
+    private void allocate(Node node, Key key, Value value) {
+
+    }
+
+    public Iterable<Value> iterable() {
+        Queue<Value> queue = new Queue<>();
         
     }
 

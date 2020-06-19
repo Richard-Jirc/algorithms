@@ -14,8 +14,7 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
     private class Node implements Comparable<Node> {
         Key key;
         Value value;
-        Node left;
-        Node right;
+        Node left, right;
         int count;
         public Node(Key k, Value v) {
             key = k;

@@ -10,7 +10,6 @@ import edu.princeton.cs.algs4.StdOut;
  */
 
 public class BinarySearchTree<Key extends Comparable<Key>, Value> {
-    private Node root;
     private class Node implements Comparable<Node> {
         Key key;
         Value value;
@@ -38,11 +37,15 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
             return string.toString();
         }
     }
+    private Node root;
+    private Value min;
+
     public BinarySearchTree() {
     }
     public boolean isEmpty() {
         return root == null;
     }
+
 
     /**GET method:
      * perform binary search for a certain key.
@@ -90,12 +93,16 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
     }
 
     /**DELETE Min Element method*/
-    public void delMin() {
+    public Value delMin() {
         root = delMin(root);
+        return min;
     }
     /**DELETE Min Helper*/
     private Node delMin(Node node) {
-        if (node.left == null) return node.right;
+        if (node.left == null) {
+            min = node.value;
+            return node.right;
+        }
         node.left = delMin(node.left);
         return node;
     }
@@ -144,7 +151,8 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         for (String i : peek) {
             System.out.println(i);
         }
-//        test.delMin();
+        System.out.println("Min:" + test.delMin());
+        System.out.println("Min:" + test.delMin());
         System.out.println(test.get(7));
 
     }

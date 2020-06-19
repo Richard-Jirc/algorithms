@@ -81,20 +81,22 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         if (this.isEmpty()) root = newNode;
     }
 
-    /**Iterable for
-     */
+    /**SORTED ITERABLE:
+     * use queue to store values in a FIFO order*/
     public Iterable<Value> iterable() {
         Queue<Value> queue = new Queue<>();
         collect(queue, root);
         return queue;
     }
+
+    /** Iterable HELPER
+     */
     private void collect(Queue<Value> q, Node node) {
         if (node == null) return;
         collect(q, node.left);
         q.enqueue(node.value);
         collect(q, node.right);
     }
-
 
     public static void main(String[] args) {
         BinarySearchTree<Integer, String> test = new BinarySearchTree<>();

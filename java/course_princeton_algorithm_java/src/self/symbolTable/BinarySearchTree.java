@@ -3,9 +3,15 @@ package self.symbolTable;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdOut;
 
+/** Unbalanced Normal BST
+ *
+ * @param <Key> extends Comparable.
+ * @param <Value>
+ */
+
 public class BinarySearchTree<Key extends Comparable<Key>, Value> {
     private Node root;
-    private class Node {
+    private class Node implements Comparable<Node> {
         Key key;
         Value value;
         Node left;
@@ -14,6 +20,9 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         public Node(Key k, Value v) {
             key = k;
             value = v;
+        }
+        public int compareTo(Node node) {
+            return this.key.compareTo(node.key);
         }
         public String toString() {
             StringBuilder string = new StringBuilder();
@@ -79,6 +88,33 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
             }
         }
         if (this.isEmpty()) root = newNode;
+    }
+
+    /**DELETE method:
+     * perform binary search,
+     * @return null if not found, Value if found.
+     */
+    public Value delete(Key key) {
+        Node node = root;
+        while (node != null) {
+            if (node.key.compareTo(key) == 0) {
+                Value result = node.value;
+                if (node.left != null && node.right != null) {
+                    Node successor = node.right;
+                    while (successor.compareTo(node.left) < 0) {
+                        if (successor.left != null) successor = successor.left;
+
+                    }
+                }
+                else if (node.left == null && node.right == null) node = null;
+                else if (node.left != null) node = node.left;
+                else node = node.right;
+                return result;
+            }
+            if (node.key.compareTo(key) > 0) node = node.left;
+            if (node.key.compareTo(key) < 0) node = node.right;
+        }
+        return null;
     }
 
     /**SORTED ITERABLE:

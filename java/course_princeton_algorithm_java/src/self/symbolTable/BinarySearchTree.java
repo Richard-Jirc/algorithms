@@ -60,7 +60,10 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         Node node = root;
         Node newNode = new Node(key, value);
         while (node != null) {
-            if (node.key.compareTo(key) == 0) node = newNode;
+            if (node.key.compareTo(key) == 0) {
+                node.value = value;
+                break;
+            }
             if (node.key.compareTo(key) > 0) {
                 if (node.left == null) {
                     node.left = newNode;
@@ -78,6 +81,8 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         if (this.isEmpty()) root = newNode;
     }
 
+    /**Iterable for
+     */
     public Iterable<Value> iterable() {
         Queue<Value> queue = new Queue<>();
         collect(queue, root);
@@ -97,6 +102,7 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         test.put(10, "10!");
         test.put(2, "2!");
         test.put(6, "6!");
+        test.put(6, "?");
         Iterable<String> peek = test.iterable();
         for (String i : peek) {
             System.out.println(i);

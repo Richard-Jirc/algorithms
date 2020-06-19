@@ -89,7 +89,18 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         if (this.isEmpty()) root = newNode;
     }
 
-    /**DELETE method:
+    /**DELETE Min Element method*/
+    public void delMin() {
+        root = delMin(root);
+    }
+    /**DELETE Min Helper*/
+    private Node delMin(Node node) {
+        if (node.left == null) return node.right;
+        node.left = delMin(node.left);
+        return node;
+    }
+
+    /**DELETE certain key method:
      * perform binary search,
      * @return null if not found, Value if found.
      */
@@ -98,16 +109,6 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         while (node != null) {
             if (node.key.compareTo(key) == 0) {
                 Value result = node.value;
-                if (node.left != null && node.right != null) {
-                    Node successor = node.right;
-                    while (successor.compareTo(node.left) < 0) {
-                        if (successor.left != null) successor = successor.left;
-
-                    }
-                }
-                else if (node.left == null && node.right == null) node = null;
-                else if (node.left != null) node = node.left;
-                else node = node.right;
                 return result;
             }
             if (node.key.compareTo(key) > 0) node = node.left;
@@ -120,31 +121,31 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
      * use queue to store values in a FIFO order*/
     public Iterable<Value> iterable() {
         Queue<Value> queue = new Queue<>();
-        collect(queue, root);
+        iterable(queue, root);
         return queue;
     }
-
-    /** Iterable HELPER
-     */
-    private void collect(Queue<Value> q, Node node) {
+    /** Iterable HELPER */
+    private void iterable(Queue<Value> q, Node node) {
         if (node == null) return;
-        collect(q, node.left);
+        iterable(q, node.left);
         q.enqueue(node.value);
-        collect(q, node.right);
+        iterable(q, node.right);
     }
 
     public static void main(String[] args) {
         BinarySearchTree<Integer, String> test = new BinarySearchTree<>();
-        test.put(5, "5!");
+        test.put(12, "12!");
         test.put(10, "10!");
+        test.put(15, "15!");
         test.put(2, "2!");
         test.put(6, "6!");
-        test.put(6, "?");
+        test.put(7, "7!");
         Iterable<String> peek = test.iterable();
         for (String i : peek) {
             System.out.println(i);
         }
-        System.out.println(test.get(6));
+//        test.delMin();
+        System.out.println(test.get(7));
 
     }
 }

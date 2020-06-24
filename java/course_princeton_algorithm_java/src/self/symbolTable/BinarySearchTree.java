@@ -14,7 +14,6 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         Key key;
         Value value;
         Node left, right;
-        int count;
         public Node(Key k, Value v) {
             key = k;
             value = v;
@@ -38,7 +37,7 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         }
     }
     private Node root;
-    private Value min;
+    private Node min;
 
     public BinarySearchTree() {
     }
@@ -94,13 +93,14 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 
     /**DELETE Min Element method*/
     public Value delMin() {
+        if (isEmpty()) return null;
         root = delMin(root);
-        return min;
+        return min.value;
     }
     /**DELETE Min Helper*/
     private Node delMin(Node node) {
         if (node.left == null) {
-            min = node.value;
+            min = node;
             return node.right;
         }
         node.left = delMin(node.left);
@@ -116,6 +116,16 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         while (node != null) {
             if (node.key.compareTo(key) == 0) {
                 Value result = node.value;
+                if (node.left == null && node.right == null) node = null;
+                else if (node.left != null && node.right != null) {
+                    Value successor = delMin();
+                    Node newNode = min;
+                    newNode.left = node.left;
+                    newNode.right = node.right;
+                    node = newNode;
+                } else {
+                    System.out.print("?");
+                }
                 return result;
             }
             if (node.key.compareTo(key) > 0) node = node.left;
@@ -151,8 +161,7 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         for (String i : peek) {
             System.out.println(i);
         }
-        System.out.println("Min:" + test.delMin());
-        System.out.println("Min:" + test.delMin());
+        test.delete(10);
         System.out.println(test.get(7));
 
     }

@@ -4,8 +4,8 @@ import java.util.Comparator;
 
 public class MergeSort<T> {
 
-    Comparator<T> comparator;
-    T[] aux;
+    private final Comparator<T> comparator;
+    private T[] aux;
 
     public MergeSort(Comparator<T> input) {
         comparator = input;

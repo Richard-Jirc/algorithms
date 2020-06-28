@@ -13,16 +13,8 @@ public class Node23<Key extends Comparable<Key>, Value> {
     public boolean isDual() {
         return m == null;
     }
-    public Node23<Key, Value> traverse(Key key) {
-        if (isDual()) {
-            if (key.compareTo(lKey) < 0) return l;
-            if (key.compareTo(rKey) > 0) return r;
-        } else {
-            if (key.compareTo(lKey) < 0) return l;
-            if (key.compareTo(rKey) < 0) return m;
-            if (key.compareTo(rKey) > 0) return r;
-        }
-        return this;
+    public boolean isLeaf() {
+        return l == null;
     }
 
     @Override

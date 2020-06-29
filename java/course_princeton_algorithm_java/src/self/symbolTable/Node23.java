@@ -1,7 +1,5 @@
 package self.symbolTable;
 
-import java.util.Objects;
-
 public class Node23<Key extends Comparable<Key>, Value> {
     Key lKey, rKey;
     Value lVal, rVal;
@@ -10,18 +8,38 @@ public class Node23<Key extends Comparable<Key>, Value> {
         lKey = key;
         lVal = value;
     }
+    public boolean isRoot() { return parent == null; }
     public boolean isDual() {
-        return m == null;
+        return rKey == null;
     }
     public boolean isLeaf() {
         return l == null;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Node23 node = (Node23) o;
-        return Objects.equals(lKey, node.lKey);
+    public void insertDual(Key k, Value v) {
+        if (lKey.compareTo(k) < 0) {
+            rKey = k;
+            rVal = v;
+        } else if (lKey.compareTo(k) > 0) {
+            rKey = lKey;
+            rVal = lVal;
+            lKey = k;
+            lVal = v;
+        } else {
+            lVal = v;
+        }
+    }
+    public Node23<Key,Value> next(Key k) {
+        if (k.compareTo(lKey) < 0) return l;
+        else if (isDual()) return r;
+        else {
+            if (k.compareTo(rKey) < 0) return m;
+            else return r;
+        }
+    }
+    public boolean check(Key k, Value v) {
+        if (lKey != k && rKey != k) return false;
+        if (lKey == k) lVal = v;
+        if (rKey == k) rVal = v;
+        return true;
     }
 }

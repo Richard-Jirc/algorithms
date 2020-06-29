@@ -1,8 +1,5 @@
 package self.pq;
-
 import edu.princeton.cs.algs4.StdDraw;
-
-import java.util.Comparator;
 
 public class MinPQ<T extends Comparable<T>> {
 
@@ -25,7 +22,11 @@ public class MinPQ<T extends Comparable<T>> {
         return size == 0;
     }
     private void sink(int index) {
-
+        while (index < size) {
+            index *= 2;
+            if (list[index].compareTo(list[index + 1]) < 0) index++;
+            
+        }
     }
     private void swim(int index) {
         while (list[index / 2].compareTo(list[index]) >= 0 && index > 1) {

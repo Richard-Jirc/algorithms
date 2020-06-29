@@ -16,27 +16,32 @@ public class MinPQ<T extends Comparable<T>> {
         list = (T[]) new Comparable[8];
         size = 1;
     }
+
+    /**INSERT api:
+     * insert an element then perform SWIM*/
     public void insert(T item) {
         list[size] = item;
         swim(size);
         size++;
     }
     public int size() {
-        return size;
+        return size - 1;
     }
     public boolean isEmpty() {
-        return size == 0;
+        return size == 1;
+    }
+    public T delMin() {
+        swap(1, size - 1);
+        sink(1);
+        T minValue = list[--size];
+        list[size] = null;
+        return minValue;
     }
 
     /**LESS helper function:
-     * if true, a < b.
-     */
+     * if true, a < b.*/
     private boolean less(int a, int b) {
         return list[a].compareTo(list[b]) <= 0;
-    }
-    private int min(int a, int b) {
-        if (less(a, b)) return a;
-        else return b;
     }
     private void swap(int a, int b) {
         T mid = list[b];
@@ -47,9 +52,10 @@ public class MinPQ<T extends Comparable<T>> {
     /**SINK helper function: if any child is smaller than self, recursively swap. */
     private void sink(int index) {
         while (index * 2 + 1 < size) {
-            int smaller = min(index * 2, index * 2 + 1);
+            int smaller = index * 2;
+            if (less(index * 2 + 1, index)) smaller++;
             if (less(index, smaller)) break;
-            swap(smaller, index);
+            swap(index, smaller);
             index = smaller;
         }
     }

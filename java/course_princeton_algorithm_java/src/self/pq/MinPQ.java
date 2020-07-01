@@ -68,8 +68,6 @@ public class MinPQ<T extends Comparable<T>> {
         }
     }
 
-
-
     public static void main(String[] args) {
 
     }

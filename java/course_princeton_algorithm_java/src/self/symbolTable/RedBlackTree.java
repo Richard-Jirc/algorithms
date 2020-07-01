@@ -16,9 +16,10 @@ public class RedBlackTree<Key extends Comparable<Key>, Value> {
         public Node(Key k, Value v) {
             key = k;
             val = v;
-            color = false;
+            color = BLACK;
         }
         public boolean isRED() { return color == RED; }
+        public void makeRED() { color = RED; }
     }
     private Node root;
 
@@ -41,10 +42,24 @@ public class RedBlackTree<Key extends Comparable<Key>, Value> {
         return null;
     }
 
-    /**ROTATE methods: helper function
+    public void insert(Key key, Value value) {
+        if (key == null) throw new IllegalArgumentException("null key to insert");
+        Node x = root;
+        while (x.left != null) {
+            int cmp = key.compareTo(x.key);
+            if (cmp < 0) x = x.left;
+            else if (cmp > 0) x = x.right;
+            else {
+                x.val = value;
+                break;
+            }
+        }
+    }
+
+    /**ROTATE methods: helper function.
      * Rotates a right-leaning red link to a left-leaning one, and vice versa.
      * When using,
-     * @param head {@code Node} connected by a red link to its {@code left/right} child.
+     * @param head {@code Node} connected by a RED link to its {@code left/right} child.
      * @return NEW {@code Node} to be connected to previous parent
      */
     private Node rotateLeft(Node head) {
@@ -62,6 +77,16 @@ public class RedBlackTree<Key extends Comparable<Key>, Value> {
         l.color = head.color;
         head.color = RED;
         return l;
+    }
+
+    /**FLIP COLOR method: helper function.
+     * the only situation when the height of the tree increases!
+     * @param head {@code Node} connected by two RED links. head's {@code left} and {@code right} should not be {@code null}.
+     */
+    private void flipColor(Node head) {
+        head.color = RED;
+        head.left.color = BLACK;
+        head.right.color = BLACK;
     }
 
     public static void main(String[] args) {

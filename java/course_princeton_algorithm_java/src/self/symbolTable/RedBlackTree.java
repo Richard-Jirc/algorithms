@@ -11,7 +11,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     private class Node {
         private K key;
         private V val;
-        private Node left, right, parent;
+        private Node left, right;
         private boolean color; // color of link that points to its parent.
         public Node(K k, V v, boolean col) {
             key = k;
@@ -19,7 +19,6 @@ public class RedBlackTree<K extends Comparable<K>, V> {
             color = col;
         }
         public boolean isRED() { return color == RED; }
-        public void makeRED() { color = RED; }
     }
     private Node root;
 

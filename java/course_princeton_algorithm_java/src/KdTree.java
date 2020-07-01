@@ -32,7 +32,7 @@ public class KdTree {
     }
     public boolean isEmpty() { return root == null; }
 
-    
+
     /**CONTAINS
      * @param p Point2D to search
      * @return {@code true} if p exists in the tree, {@code null} if p is null
@@ -63,7 +63,13 @@ public class KdTree {
         return new Queue<>();
     }
 
+    /**DRAW. draw all points to {@code Std.draw}*/
+    public void draw() {
 
+    }
+
+
+    
     /**COMPARE helper function.
      * @return {@code true} if a < b in {@code x()} or {@code y()}.
      */
@@ -76,10 +82,7 @@ public class KdTree {
         throw new IllegalArgumentException("lessY() argument contains null");
     }
 
-    /**DRAW. draw all points to {@code Std.draw}*/
-    public void draw() {
 
-    }
     public static void main(String[] args) {
 
     }

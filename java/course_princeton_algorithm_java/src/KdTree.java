@@ -23,13 +23,14 @@ public class KdTree {
             return (int) diff;
         }
     }
-
     private Node root;
 
     public KdTree() {
         root = null;
     }
     public boolean isEmpty() { return root == null; }
+
+
 
     /**CONTAINS
      * @param p Point2D to search
@@ -50,6 +51,19 @@ public class KdTree {
     /**Kd-Tree INSERTION*/
     public void insert(Point2D p) {
         root = new Node(p, 1);
+    }
+
+
+    /**COMPARE helper function.
+     * @return {@code true} if a < b in {@code x()} or {@code y()}.
+     */
+    private boolean lessX(Point2D a, Point2D b) {
+        if (a != null && b != null) return (a.x() - b.x()) < 0;
+        throw new IllegalArgumentException("lessX() argument contains null");
+    }
+    private boolean lessY(Point2D a, Point2D b) {
+        if (a != null && b != null) return (a.y() - b.y()) < 0;
+        throw new IllegalArgumentException("lessY() argument contains null");
     }
 
     public static void main(String[] args) {

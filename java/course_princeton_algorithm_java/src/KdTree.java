@@ -1,4 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.RectHV;
 
 /**Kd-Tree for chapter 5 assignment
  * implementing red-black tree data structure to ensure o(logN) time for operations
@@ -30,8 +32,7 @@ public class KdTree {
     }
     public boolean isEmpty() { return root == null; }
 
-
-
+    
     /**CONTAINS
      * @param p Point2D to search
      * @return {@code true} if p exists in the tree, {@code null} if p is null
@@ -54,6 +55,15 @@ public class KdTree {
     }
 
 
+    /**RECT RANGE Search.
+     * @param rect to search in.
+     * @return a {@code Queue} object that contains all points
+     */
+    public Iterable<Point2D> range(RectHV rect) {
+        return new Queue<>();
+    }
+
+
     /**COMPARE helper function.
      * @return {@code true} if a < b in {@code x()} or {@code y()}.
      */
@@ -66,6 +76,10 @@ public class KdTree {
         throw new IllegalArgumentException("lessY() argument contains null");
     }
 
+    /**DRAW. draw all points to {@code Std.draw}*/
+    public void draw() {
+
+    }
     public static void main(String[] args) {
 
     }

@@ -1,4 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.RectHV;
 
 public class KdTree {
     private static class Node {
@@ -13,11 +15,19 @@ public class KdTree {
          * @param useX {@code true} to compare by {@code x()}, otherwise by {@code y()}.
          * @return {@code int > 0} if search should go LEFT.
          */
-        public int compare(Point2D p, boolean useX) {
-            double diff;
-            if (useX) diff = this.pt.x() - p.x();
-            else diff = this.pt.y() - p.y();
-            return (int) diff;
+        public double compare(Point2D p, boolean useX) {
+            if (useX) return this.pt.x() - p.x();
+            else return this.pt.y() - p.y();
+        }
+        public String toString() {
+            StringBuilder string = new StringBuilder();
+            if (left != null) string.append(left.pt.toString());
+            string.append("<=");
+            string.append(pt.toString());
+            string.append("=>");
+            if (right != null) string.append(right.pt.toString());
+            string.append("\n");
+            return string.toString();
         }
     }
     private Node root;
@@ -28,9 +38,7 @@ public class KdTree {
         size = 0;
     }
     public boolean isEmpty() { return root == null; }
-    public int size() {
-        return size;
-    }
+    public int size() { return size; }
 
     /**Kd-Tree INSERTION function.
      * @param p to insert
@@ -39,14 +47,55 @@ public class KdTree {
         root = put(root, p, true);
     }
     private Node put(Node x, Point2D p, boolean useX) {
-        if (x == null) return new Node(p);
-        int cmp = x.compare(p, useX);
+        if (x == null) {
+            size++;
+            return new Node(p);
+        }
+        double cmp = x.compare(p, useX);
         if (cmp > 0) x.left = put(x.left, p, !useX);
         else if (cmp < 0) x.right = put(x.right, p, !useX);
         else x.pt = p;
+        return x;
+    }
+
+    /**Kd-Tree CONTAINS function.
+     * @param p point to search
+     * @return {@code true} if matching point is found.
+     */
+    public boolean contains(Point2D p) {
+        if (p == null) return false;
+        if (root == null) return false;
+        return search(root, p, true);
+    }
+    private boolean search(Node x, Point2D p, boolean useX) {
+        if (x == null) return false;
+        double cmp = x.compare(p, useX);
+        if (cmp > 0) return search(x.left, p, !useX);
+        else if (cmp < 0) return search(x.right, p, !useX);
+        else {
+            if (x.pt.equals(p)) return true;
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param rect to search
+     * @return a {@code Queue} object as {@code Iterable};
+     */
+    public Iterable<Point2D> range(RectHV rect) {
+        Queue<Point2D> list = new Queue<>();
+        
+        return list;
     }
 
     public static void main(String[] args) {
-
+        KdTree test = new KdTree();
+        test.insert(new Point2D(0.2, 0.3));
+        test.insert(new Point2D(0.5, 0.9));
+        test.insert(new Point2D(0.8, 0.2));
+        System.out.print(test.root.right.toString());
+        System.out.println(test.size());
+        System.out.print(test.contains(new Point2D(0.4, 0.2)));
     }
 }

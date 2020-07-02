@@ -1,10 +1,9 @@
+package self.symbolTable;
+
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 
-/**Kd-Tree for chapter 5 assignment
- * implementing red-black tree data structure to ensure o(logN) time for operations
- * */
 public class KdTreeRB {
     private final boolean RED = true;
     private final boolean BLACK = false;

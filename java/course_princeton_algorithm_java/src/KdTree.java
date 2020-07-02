@@ -14,7 +14,6 @@ public class KdTree {
             x = useX;
             rect = area;
         }
-
         public RectHV leftRect() {
             if (x) return new RectHV(rect.xmin(), rect.ymin(), pt.x(), rect.ymax());
             return new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), pt.y());
@@ -23,6 +22,7 @@ public class KdTree {
             if (x) return new RectHV(pt.x(), rect.ymin(), rect.xmax(), rect.ymax());
             return new RectHV(rect.xmin(), pt.y(), rect.xmax(), rect.ymax());
         }
+
         /**COMPARE {@code Node} with a {@code Point2D}
          * @param p to compare with
          * @return {@code int > 0} if search should go LEFT.
@@ -47,6 +47,7 @@ public class KdTree {
     private Node root;
     private int size;
 
+    /**Kd-Tree CONSTRUCTOR*/
     public KdTree() {
         root = null;
         size = 0;
@@ -55,6 +56,7 @@ public class KdTree {
     public int size() { return size; }
 
     /**Kd-Tree INSERTION function.
+     * if the insertion point's x/y ties with current node, go RIGHT!
      * @param p to insert
      */
     public void insert(Point2D p) {
@@ -79,27 +81,31 @@ public class KdTree {
     public boolean contains(Point2D p) {
         if (p == null) return false;
         if (root == null) return false;
-        return search(root, p, true);
+        return search(root, p);
     }
-    private boolean search(Node x, Point2D p, boolean useX) {
+    private boolean search(Node x, Point2D p) {
         if (x == null) return false;
         double cmp = x.compare(p);
-        if (cmp > 0) return search(x.left, p, !useX);
-        else if (cmp < 0) return search(x.right, p, !useX);
-        else return x.pt.equals(p);
+        if (cmp > 0) return search(x.left, p);
+        else if (cmp < 0 || !x.pt.equals(p)) return search(x.right, p);
+        else return true;
     }
 
     /**RECTANGLE SEARCH
-     * @param rect to search
+     * @param q {@code RectHV} to search
      * @return a {@code Queue} object as {@code Iterable};
      */
-    public Iterable<Point2D> range(RectHV rect) {
+    public Iterable<Point2D> range(RectHV q) {
         Queue<Point2D> list = new Queue<>();
-
+        search(root, q, list);
         return list;
     }
-    private void search() {
-
+    private void search(Node x, RectHV q, Queue<Point2D> queue) {
+        if (x != null && x.rect.intersects(q)) {
+            if (q.contains(x.pt)) queue.enqueue(x.pt);
+            search(x.left, q, queue);
+            search(x.right, q, queue);
+        }
     }
 
     /**NEAREST POINT SEARCH
@@ -114,6 +120,8 @@ public class KdTree {
 //
 //    }
 
+    /**DRAW to StdDraw:
+     * for debugging.*/
     public void draw() {
         if (root != null) draw(root);
     }
@@ -132,6 +140,7 @@ public class KdTree {
         if (node.right != null) draw(node.right);
     }
 
+
     /**DETERMINE if new entry point is a CLOSER ONE.
      * @param target supplied target Point
      * @param p first Pt
@@ -146,11 +155,11 @@ public class KdTree {
         test.insert(new Point2D(0.2, 0.3));
         test.insert(new Point2D(0.5, 0.9));
         test.insert(new Point2D(0.8, 0.2));
-        test.insert(new Point2D(0.9, 1.5));
+        test.insert(new Point2D(0.9, 0.99));
         test.insert(new Point2D(0.2, 0.5));
         test.insert(new Point2D(0.05, 0.5));
-        System.out.print(test.root.toString());
+        System.out.print(test.root.right.left.toString());
         System.out.println(test.size());
-        System.out.print(test.contains(new Point2D(0.5, 0.2)));
+        System.out.print(test.range(new RectHV(0, 0, 0.3, 0.5)));
     }
 }

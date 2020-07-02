@@ -21,7 +21,7 @@ public class PointSET {
     public void draw() {
         StdDraw.setPenColor(StdDraw.BLACK);
         for (Point2D i : stack) {
-            StdDraw.filledCircle(i.x(), i.y(), 0.005);
+            StdDraw.filledCircle(i.x(), i.y(), 0.003);
         }
     }
 
@@ -33,9 +33,19 @@ public class PointSET {
         return result;
     }
 
-//    public Point2D nearest(Point2D p) {
-//
-//    }
+    public Point2D nearest(Point2D p) {
+        Point2D nearest = new Point2D(0.5, 0.5);
+        double distance = 100;
+        double current;
+        for (Point2D i : stack) {
+            current = p.distanceSquaredTo(i);
+            if (current < distance) {
+                nearest = i;
+                distance = current;
+            }
+        }
+        return nearest;
+    }
 
     public static void main(String[] args) {
 

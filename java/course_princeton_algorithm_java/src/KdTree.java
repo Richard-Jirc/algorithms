@@ -114,7 +114,7 @@ public class KdTree {
      */
     public Point2D nearest(Point2D p) {
         Point2D closest = root.pt;
-        return new Point2D(0,0);
+        return new Point2D(0.5,0.5);
     }
 //    private Point2D near(Node x, Point2D p) {
 //
@@ -126,7 +126,8 @@ public class KdTree {
         if (root != null) draw(root);
     }
     private void draw(Node node) {
-        StdDraw.setPenRadius(0.002);
+        double POINT_SIZE = 0.003;
+        StdDraw.setPenRadius(0.001);
         if (node.x) {
             StdDraw.setPenColor(StdDraw.RED); // draw vertical line!
             StdDraw.line(node.pt.x(), node.rect.ymin(), node.pt.x(), node.rect.ymax());
@@ -135,7 +136,7 @@ public class KdTree {
             StdDraw.line(node.rect.xmin(), node.pt.y(), node.rect.xmax(), node.pt.y());
         }
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.filledCircle(node.pt.x(), node.pt.y(), 0.005);
+        StdDraw.filledCircle(node.pt.x(), node.pt.y(), POINT_SIZE);
         if (node.left != null) draw(node.left);
         if (node.right != null) draw(node.right);
     }

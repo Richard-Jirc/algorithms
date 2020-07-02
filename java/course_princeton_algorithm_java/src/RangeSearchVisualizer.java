@@ -42,7 +42,7 @@ public class RangeSearchVisualizer {
         StdDraw.clear();
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.setPenRadius(0.01);
-        brute.draw();
+        kdtree.draw();
         StdDraw.show();
 
         // process range search queries
@@ -71,7 +71,7 @@ public class RangeSearchVisualizer {
             StdDraw.clear();
             StdDraw.setPenColor(StdDraw.BLACK);
             StdDraw.setPenRadius(0.01);
-            brute.draw();
+            kdtree.draw();
 
             // draw the rectangle
             RectHV rect = new RectHV(Math.min(x0, x1), Math.min(y0, y1),
@@ -81,13 +81,13 @@ public class RangeSearchVisualizer {
             rect.draw();
 
             // draw the range search results for brute-force data structure in red
-            StdDraw.setPenRadius(0.03);
+            StdDraw.setPenRadius(0.02);
             StdDraw.setPenColor(StdDraw.RED);
             for (Point2D p : brute.range(rect))
                 p.draw();
 
             // draw the range search results for kd-tree in blue
-            StdDraw.setPenRadius(0.02);
+            StdDraw.setPenRadius(0.01);
             StdDraw.setPenColor(StdDraw.BLUE);
             for (Point2D p : kdtree.range(rect))
                 p.draw();

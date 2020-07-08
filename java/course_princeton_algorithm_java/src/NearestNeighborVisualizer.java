@@ -34,6 +34,7 @@ public class NearestNeighborVisualizer {
 
         // process nearest neighbor queries
         StdDraw.enableDoubleBuffering();
+
         while (true) {
 
             // the location (x, y) of the mouse

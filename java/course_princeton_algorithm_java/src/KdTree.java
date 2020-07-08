@@ -1,4 +1,4 @@
-/**CHAPTER 5 ASSIGNMENT: Kd-Tree*/
+/** CHAPTER 5 ASSIGNMENT: Kd-Tree*/
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
@@ -30,7 +30,7 @@ public class KdTree {
             else return target.y() < pt.y();
         }
 
-        /**COMPARE {@code Node} with a {@code Point2D}
+        /** COMPARE {@code Node} with a {@code Point2D}
          * @param p to compare with
          * @return {@code int > 0} if search should go LEFT.
          */
@@ -42,7 +42,7 @@ public class KdTree {
     private Node root;
     private int size;
 
-    /**Kd-Tree CONSTRUCTOR*/
+    /** Kd-Tree CONSTRUCTOR*/
     public KdTree() {
         root = null;
         size = 0;
@@ -50,11 +50,12 @@ public class KdTree {
     public boolean isEmpty() { return root == null; }
     public int size() { return size; }
 
-    /**Kd-Tree INSERTION function.
+    /** Kd-Tree INSERTION function.
      * if the insertion point's x/y ties with current node, go RIGHT!
      * @param p to insert
      */
     public void insert(Point2D p) {
+        if (p == null) throw new IllegalArgumentException("insert null");
         RectHV canvas = new RectHV(0, 0, 1, 1);
         root = put(root, p, true, canvas);
     }
@@ -69,12 +70,12 @@ public class KdTree {
         return x;
     }
 
-    /**Kd-Tree CONTAINS function.
+    /** Kd-Tree CONTAINS function.
      * @param p point to search
      * @return {@code true} if matching point is found.
      */
     public boolean contains(Point2D p) {
-        if (p == null) return false;
+        if (p == null) throw new IllegalArgumentException("contains null");
         if (root == null) return false;
         return search(root, p);
     }
@@ -86,11 +87,12 @@ public class KdTree {
         else return true;
     }
 
-    /**RECTANGLE SEARCH
+    /** RECTANGLE SEARCH
      * @param q {@code RectHV} to search
      * @return a {@code Queue} object as {@code Iterable};
      */
     public Iterable<Point2D> range(RectHV q) {
+        if (q == null) throw new IllegalArgumentException("RectHV range null");
         Queue<Point2D> list = new Queue<>();
         search(root, q, list);
         return list;
@@ -103,35 +105,39 @@ public class KdTree {
         }
     }
 
-    /**NEAREST POINT SEARCH
+    private Point2D closest;
+    private double minD;
+
+    /** NEAREST POINT SEARCH
      * @param p as target point
      * @return the nearest {@code Point2D}
      */
     public Point2D nearest(Point2D p) {
+        if (p == null) throw new IllegalArgumentException("nearest null");
         if (isEmpty()) return null;
-        Point2D closest = root.pt;
-        double minD = 10;
-        near(root, p, closest, minD);
+        closest = root.pt;
+        minD = 10;
+        near(root, p);
         return closest;
     }
-    private void near(Node x, Point2D target, Point2D closest, double minD) {
+    private void near(Node x, Point2D target) {
         if (x == null) return;
         if (x.rect.distanceSquaredTo(target) > minD) return;
         double curD = x.pt.distanceSquaredTo(target);
-        if (curD < minD) { // update
-            minD = curD;
-            closest = x.pt;
-        }
-        if (x.nearGoLeft(target)) {
-            near(x.left, target, closest, minD);
-            near(x.right, target, closest, minD);
-        } else {
-            near(x.right, target, closest, minD);
-            near(x.left, target, closest, minD);
-        }
+        if (curD < minD) update(x.pt, curD);
+
+        boolean whichWay = x.nearGoLeft(target);
+        if (whichWay) near(x.left, target);
+        else near(x.right, target);
+        if (whichWay) near(x.right, target);
+        else near(x.left, target);
+    }
+    private void update(Point2D p, double d) {
+        closest = p;
+        minD = d;
     }
 
-    /**DRAW to StdDraw:
+    /** DRAW to StdDraw:
      * for debugging.*/
     public void draw() {
         if (root != null) draw(root);
@@ -153,6 +159,7 @@ public class KdTree {
     }
 
     public static void main(String[] args) {
-
+        KdTree test = new KdTree();
+        test.insert(new Point2D(0, 0));
     }
 }

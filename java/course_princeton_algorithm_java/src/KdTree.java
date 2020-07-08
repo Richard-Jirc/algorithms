@@ -7,8 +7,8 @@ import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree {
     private static class Node {
-        private Point2D pt;
-        private RectHV rect;
+        private final Point2D pt;
+        private final RectHV rect;
         private Node left, right;
         private final boolean x;
         public Node(Point2D p, boolean useX, RectHV area) {
@@ -25,6 +25,11 @@ public class KdTree {
             return new RectHV(rect.xmin(), pt.y(), rect.xmax(), rect.ymax());
         }
 
+        public boolean nearGoLeft(Point2D target) {
+            if (x) return target.x() < pt.x();
+            else return target.y() < pt.y();
+        }
+
         /**COMPARE {@code Node} with a {@code Point2D}
          * @param p to compare with
          * @return {@code int > 0} if search should go LEFT.
@@ -32,18 +37,6 @@ public class KdTree {
         public double compare(Point2D p) {
             if (x) return this.pt.x() - p.x();
             else return this.pt.y() - p.y();
-        }
-        public String toString() {
-            StringBuilder string = new StringBuilder();
-            if (left != null) string.append(left.pt.toString());
-            string.append("<=");
-            if (x) string.append("*");
-            string.append(pt.toString());
-            if (!x) string.append("*");
-            string.append("=>");
-            if (right != null) string.append(right.pt.toString());
-            string.append("\n");
-            return string.toString();
         }
     }
     private Node root;
@@ -115,17 +108,27 @@ public class KdTree {
      * @return the nearest {@code Point2D}
      */
     public Point2D nearest(Point2D p) {
+        if (isEmpty()) return null;
         Point2D closest = root.pt;
-        double minD = 1.414;
-        return new Point2D(0.5,0.5);
+        double minD = 10;
+        near(root, p, closest, minD);
+        return closest;
     }
-    private void near(Node x, Point2D closest, double minD) {
-        double curD = x.pt.distanceSquaredTo(closest);
+    private void near(Node x, Point2D target, Point2D closest, double minD) {
+        if (x == null) return;
+        if (x.rect.distanceSquaredTo(target) > minD) return;
+        double curD = x.pt.distanceSquaredTo(target);
         if (curD < minD) { // update
             minD = curD;
             closest = x.pt;
         }
-
+        if (x.nearGoLeft(target)) {
+            near(x.left, target, closest, minD);
+            near(x.right, target, closest, minD);
+        } else {
+            near(x.right, target, closest, minD);
+            near(x.left, target, closest, minD);
+        }
     }
 
     /**DRAW to StdDraw:
@@ -149,26 +152,7 @@ public class KdTree {
         if (node.right != null) draw(node.right);
     }
 
-
-    /**DETERMINE if new entry point is a CLOSER ONE.
-     * @param target supplied target Point
-     * @param p first Pt
-     * @param q second Pt
-     * @return {@code true} if q is CLOSER, equal or bigger returns {@code false}.
-     */
-    private boolean closer(Point2D target, Point2D p, Point2D q) {
-        return target.distanceSquaredTo(q) < target.distanceSquaredTo(p);
-    }
     public static void main(String[] args) {
-        KdTree test = new KdTree();
-        test.insert(new Point2D(0.2, 0.3));
-        test.insert(new Point2D(0.5, 0.9));
-        test.insert(new Point2D(0.8, 0.2));
-        test.insert(new Point2D(0.9, 0.99));
-        test.insert(new Point2D(0.2, 0.5));
-        test.insert(new Point2D(0.05, 0.5));
-        System.out.print(test.root.right.left.toString());
-        System.out.println(test.size());
-        System.out.print(test.range(new RectHV(0, 0, 0.3, 0.5)));
+
     }
 }

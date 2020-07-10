@@ -1,4 +1,4 @@
-/** CHAPTER 5 ASSIGNMENT: Kd-Tree*/
+/* CHAPTER 5 ASSIGNMENT: Kd-Tree */
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;

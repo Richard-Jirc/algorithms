@@ -1,3 +1,5 @@
+package normal;
+
 public class staircase {
     String buff = "h";
     public staircase() {

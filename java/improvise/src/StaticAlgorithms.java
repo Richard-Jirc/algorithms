@@ -1,9 +1,7 @@
 import java.util.*;
 
 public class StaticAlgorithms {
-
-
-
+    
     /**Reverse Integer: last modified - 20.7.12
      * @param x int to reverse
      * @return 0 if the result {@code OVERFLOWS}, else the reversed Integer.
@@ -22,7 +20,6 @@ public class StaticAlgorithms {
         return (int) result;
     }
 
-
     /**TwoSum SORTED: last modified - 20.7.12
      * if not sorted, the HashMap solution maybe favorable.
      * but since is sorted...
@@ -39,7 +36,7 @@ public class StaticAlgorithms {
     }
 
     public static void main(String[] args) {
-        int[] test = {2, 7, 11, 15};
+        int[] test = {2, 7, 11, 18};
         System.out.print(Arrays.toString(twoSum(test, 9)));
     }
 

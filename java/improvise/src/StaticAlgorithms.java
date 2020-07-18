@@ -7,6 +7,7 @@ public class StaticAlgorithms {
      * return -1 if do not exist.
      */
     public static int nextGreaterElement(int n) {
+        int input = n;
         // extract digits first
         int[] temp = new int[10];
         int[] digit;
@@ -19,18 +20,17 @@ public class StaticAlgorithms {
         digit = new int[k];
         System.arraycopy(temp, 0, digit, 0, k);
 
-        int minDiff = (int) Math.pow(10, k - 1);
-        boolean found = false;
+        int minDiff = 0;
         for (int j = 0; j < digit.length; j++) {
             for (int s = j + 1; s < digit.length; s++) {
                 if (digit[s] >= digit[j]) continue;
-                if (swapDiff(j, s, digit) > minDiff) break;
+                if (swapDiff(j, s, digit) > minDiff && minDiff != 0) break;
                 minDiff = swapDiff(j, s, digit);
-                found = true;
             }
         }
 
-        return minDiff;
+        if (minDiff == 0) return -1;
+        else return input + minDiff;
     }
     private static int swapDiff(int j, int s, int[] digit) {
         return (int) ((digit[j] - digit[s]) * Math.pow(10, s) + (digit[s] - digit[j]) * Math.pow(10, j));
@@ -70,7 +70,7 @@ public class StaticAlgorithms {
     }
 
     public static void main(String[] args) {
-        System.out.print(nextGreaterElement(276));
+        System.out.print(nextGreaterElement(21));
     }
 
 }

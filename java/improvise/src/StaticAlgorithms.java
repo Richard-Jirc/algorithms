@@ -2,6 +2,8 @@ import java.util.*;
 
 public class StaticAlgorithms {
 
+
+
     /**Next Greater Element: last modified - 20.7.18
      * find the smallest integer that has same digits but greater than the input n.
      * return -1 if do not exist.
@@ -24,16 +26,14 @@ public class StaticAlgorithms {
         for (int j = 0; j < digit.length; j++) {
             for (int s = j + 1; s < digit.length; s++) {
                 if (digit[s] >= digit[j]) continue;
-                if (swapDiff(j, s, digit) > minDiff && minDiff != 0) break;
-                minDiff = swapDiff(j, s, digit);
+                int diff = (int) ((digit[j] - digit[s]) * Math.pow(10, s) + (digit[s] - digit[j]) * Math.pow(10, j));
+                if (diff > minDiff && minDiff != 0) break;
+                minDiff = diff;
             }
         }
 
         if (minDiff == 0) return -1;
         else return input + minDiff;
-    }
-    private static int swapDiff(int j, int s, int[] digit) {
-        return (int) ((digit[j] - digit[s]) * Math.pow(10, s) + (digit[s] - digit[j]) * Math.pow(10, j));
     }
 
     /**Reverse Integer: last modified - 20.7.12
@@ -70,7 +70,8 @@ public class StaticAlgorithms {
     }
 
     public static void main(String[] args) {
-        System.out.print(nextGreaterElement(21));
+        String test = "hhhhh";
+        System.out.print(test.length());
     }
 
 }

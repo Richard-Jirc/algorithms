@@ -40,6 +40,7 @@ public class SAP {
         fromV.enqueue(v);
         fromW.enqueue(w);
         int depth = 1;
+        int champion = Integer.MAX_VALUE;
         while (!fromV.isEmpty() && !fromW.isEmpty()) {
             int x = fromV.dequeue();
             int y = fromW.dequeue();
@@ -52,6 +53,7 @@ public class SAP {
                 for (int k : adjY) {
                     if (i == k) {
                         // found matching common ancestor!
+                        int distance = distToV[i] + distToW[k];
                         return 0;
                     }
                     if (edgeToW[k] != -1) continue;

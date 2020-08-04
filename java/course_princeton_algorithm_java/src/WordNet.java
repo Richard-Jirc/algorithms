@@ -6,8 +6,8 @@ import edu.princeton.cs.algs4.RedBlackBST;
 
 public class WordNet {
 
-    RedBlackBST<String, Integer> word; //
-    Digraph connection;
+    RedBlackBST<String, Integer> word; // the symbol table that contains number<==>word
+    Digraph connection; // hypernym digraph
 
     public WordNet(String synsets, String hypernyms) {
         if (synsets == null || hypernyms == null) throw new IllegalArgumentException("constructor argument null");

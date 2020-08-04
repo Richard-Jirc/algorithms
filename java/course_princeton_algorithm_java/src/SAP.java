@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class SAP {
 
-    private final Digraph graph; // the digraph that need to be processed
+    private final Digraph graph; // defensive copy of the digraph
     private final int[] edgeToV, distToV, edgeToW, distToW; // BFS search arrays
 
     public SAP(Digraph G) {

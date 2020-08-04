@@ -1,5 +1,5 @@
 /* AlgorithmII-CHAPTER 1 ASSIGNMENT
- helper class DeluxeBFS */
+ SAP's helper class DeluxeBFS */
 
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.Queue;
@@ -27,6 +27,7 @@ public class DeluxeBFS {
         return distTo[v];
     }
 
+    // standard breadth first search
     private void bfs(Digraph G, int s) {
         Queue<Integer> q = new Queue<>();
         q.enqueue(s);

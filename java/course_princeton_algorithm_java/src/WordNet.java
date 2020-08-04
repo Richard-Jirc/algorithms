@@ -13,7 +13,7 @@ public class WordNet {
         if (synsets == null || hypernyms == null) throw new IllegalArgumentException("constructor argument null");
         word = new RedBlackBST<>();
         connection = new RedBlackBST<>();
-        StdIn.hasNextLine()
+        StdIn.hasNextLine();
     }
     
     public boolean isNoun(String word) {

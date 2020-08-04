@@ -51,7 +51,7 @@ public class SAP {
                 distToV[i] = depth;
                 for (int k : adjY) {
                     if (i == k) {
-                        // found something
+                        // found matching common ancestor!
                         return 0;
                     }
                     if (edgeToW[k] != -1) continue;
@@ -86,13 +86,10 @@ public class SAP {
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
         return 0;
     }
-
     /** helper function to check v&w arguments */
     private void checkV(int v, int w) {
         if (v < 0 || v >= graph.V() || w < 0 || w >= graph.V()) throw new IllegalArgumentException("vertex out of range");
     }
-
-
 
     public static void main(String[] args) {
         In in = new In(args[0]);

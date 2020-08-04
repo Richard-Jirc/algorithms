@@ -5,11 +5,12 @@ import edu.princeton.cs.algs4.In;
 
 public class SAP {
 
-    Digraph graph;
+    Digraph graph; // the digraph that need to be processed
+    
 
     public SAP(Digraph G) {
         if (G == null) throw new IllegalArgumentException("constructor argument null");
-        
+        graph = G;
     }
 
     /**
@@ -19,7 +20,7 @@ public class SAP {
      * @return {@code length} of shortest ancestral path, {@code -1} when the path do not exist.
      */
     public int length(int v, int w) {
-        if (v < 0 || v > )
+        if (v < 0 || v > graph.V() || w < 0 || w > graph.V()) throw new IllegalArgumentException("vertex out of range");
         return 0;
     }
     /** Override version of above.

@@ -1,9 +1,8 @@
 /* AlgorithmII-CHAPTER 1 ASSIGNMENT: WordNet */
 
-import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.RedBlackBST;
-import edu.princeton.cs.algs4.StdIn;
 
 public class WordNet {
 
@@ -12,6 +11,9 @@ public class WordNet {
 
     public WordNet(String synsets, String hypernyms) {
         if (synsets == null || hypernyms == null) throw new IllegalArgumentException("constructor argument null");
+        In syn = new In(synsets);
+        In hyp = new In(hypernyms);
+
         word = new RedBlackBST<>();
         connection = new Digraph(5);
     }
